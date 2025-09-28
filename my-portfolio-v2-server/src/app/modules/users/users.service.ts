@@ -1,22 +1,37 @@
-// import type { Prisma } from "@prisma/client";
-// import { prisma } from "../../config/db";
-// import AppError from "../../errorHelpers/AppError";
-// import httpStatus from "http-status-codes";
+import AppError from "../../errorHelpers/AppError";
+import { IAuthProvider, IUser } from "./users.interface";
+import { User } from "./users.model";
+import httpStatus from "http-status-codes";
+import bcryptjs from "bcryptjs";
+import { envVars } from "../../config/env";
 
-// const createUser = async (data: Prisma.UserCreateInput) => {
-//   const isUserExist = await prisma.user.findUnique({
-//     where: { email: data.email },
-//   });
+const createUser = async (payload: Partial<IUser>) => {
+  const { email, password, ...rest } = payload;
+  const isUserExist = await User.findOne({ email });
 
-//   if (isUserExist) {
-//     throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
-//   }
-//   const createUser = await prisma.user.create({
-//     data,
-//   });
-//   return createUser;
-// };
+  if (isUserExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
+  }
 
-// export const UserServices = {
-//   createUser,
-// };
+  const hashedPassword = await bcryptjs.hash(
+    password as string,
+    Number(envVars.BCRYPT_SALT_ROUND)
+  );
+
+  const authProvider: IAuthProvider = {
+    provider: "credentials",
+    providerId: email as string,
+  };
+
+  const user = await User.create({
+    email,
+    password: hashedPassword,
+    auths: [authProvider],
+    ...rest,
+  });
+  return user;
+};
+
+export const UserServices = {
+  createUser,
+};
