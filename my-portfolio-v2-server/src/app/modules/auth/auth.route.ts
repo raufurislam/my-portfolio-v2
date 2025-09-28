@@ -6,6 +6,7 @@ import { envVars } from "../../config/env";
 const router = Router();
 
 router.post("/login", AuthControllers.credentialsLogin);
+router.post("/logout", AuthControllers.logout);
 
 router.get(
   "/google",
