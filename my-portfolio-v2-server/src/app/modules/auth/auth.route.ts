@@ -2,12 +2,20 @@ import { NextFunction, Request, Response, Router } from "express";
 import { AuthControllers } from "./auth.controller";
 import passport from "passport";
 import { envVars } from "../../config/env";
+import { Role } from "../users/users.interface";
+import { checkAuth } from "./../../middlewares/checkAuth";
 
 const router = Router();
 
 router.post("/login", AuthControllers.credentialsLogin);
 router.post("/logout", AuthControllers.logout);
 router.post("/refresh-token", AuthControllers.getNewAccessToken);
+
+router.post(
+  "/set-password",
+  checkAuth(...Object.values(Role)),
+  AuthControllers.setPassword
+);
 
 router.get(
   "/google",

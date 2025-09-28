@@ -24,7 +24,10 @@ const userSchema = new Schema<IUser>(
       default: Role.USER,
     },
     avatar: { type: String },
-    auths: [authProviderSchema],
+    auths: {
+      type: [authProviderSchema],
+      default: [],
+    },
   },
   {
     timestamps: true,

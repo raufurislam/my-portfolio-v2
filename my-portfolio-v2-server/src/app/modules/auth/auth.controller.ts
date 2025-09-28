@@ -8,6 +8,7 @@ import { setAuthCookie } from "../../utils/setCookie";
 import { createUserTokens } from "../../utils/userToken";
 import { envVars } from "../../config/env";
 import { AuthServices } from "./auth.service";
+import { JwtPayload } from "jsonwebtoken";
 
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -109,9 +110,26 @@ const getNewAccessToken = catchAsync(
   }
 );
 
+const setPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload;
+    const { password } = req.body;
+
+    await AuthServices.setPassword(decodedToken.userId, password);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Password Changed Successfully",
+      data: null,
+    });
+  }
+);
+
 export const AuthControllers = {
   credentialsLogin,
   googleCallbackController,
   logout,
   getNewAccessToken,
+  setPassword,
 };
