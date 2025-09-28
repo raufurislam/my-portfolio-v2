@@ -1,3 +1,12 @@
-const credentialsLogin = async () => {};
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userToken";
 
-export const AuthServices = { credentialsLogin };
+const getNewAccessToken = async (refreshToken: string) => {
+  const newAccessToken = await createNewAccessTokenWithRefreshToken(
+    refreshToken
+  );
+
+  return {
+    accessToken: newAccessToken,
+  };
+};
+export const AuthServices = { getNewAccessToken };
