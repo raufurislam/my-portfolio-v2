@@ -15,7 +15,7 @@ export interface IUser {
   password: string;
   role: Role;
   avatar?: string;
-  auths?: IAuthProvider[];
+  auths: IAuthProvider[];
   createdAt?: Date;
   updatedAt?: Date;
 }
