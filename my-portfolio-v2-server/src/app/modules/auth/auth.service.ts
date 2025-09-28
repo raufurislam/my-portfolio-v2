@@ -5,6 +5,7 @@ import httpStatus from "http-status-codes";
 import bcryptjs from "bcryptjs";
 import { envVars } from "../../config/env";
 import { IAuthProvider } from "../users/users.interface";
+import { JwtPayload } from "jsonwebtoken";
 
 const getNewAccessToken = async (refreshToken: string) => {
   const newAccessToken = await createNewAccessTokenWithRefreshToken(
@@ -51,4 +52,32 @@ const setPassword = async (userId: string, plainPassword: string) => {
 
   await user.save();
 };
-export const AuthServices = { getNewAccessToken, setPassword };
+
+const changePassword = async (
+  oldPassword: string,
+  newPassword: string,
+  decodedToken: JwtPayload
+) => {
+  const user = await User.findById(decodedToken.userId);
+
+  const isOldPasswordMatch = await bcryptjs.compare(
+    oldPassword,
+    user!.password as string
+  );
+
+  if (!isOldPasswordMatch) {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Old Password Does not matched"
+    );
+  }
+
+  user!.password = await bcryptjs.hash(
+    newPassword,
+    Number(envVars.BCRYPT_SALT_ROUND)
+  );
+
+  user!.save();
+};
+
+export const AuthServices = { getNewAccessToken, setPassword, changePassword };
