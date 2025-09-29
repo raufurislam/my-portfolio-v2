@@ -1,0 +1,22 @@
+import { Request, Response } from "express";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
+import { BlogServices } from "./blog.service";
+import httpStatus from "http-status-codes";
+import { JwtPayload } from "jsonwebtoken";
+
+const createBlog = catchAsync(async (req: Request, res: Response) => {
+  const user = req.user as JwtPayload;
+  const blogData = req.body;
+
+  const blog = await BlogServices.createBlog(blogData, user);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "Blog created successfully",
+    data: blog,
+  });
+});
+
+export const BlogControllers = { createBlog };
