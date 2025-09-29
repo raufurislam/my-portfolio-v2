@@ -33,8 +33,22 @@ const projectSchema = new Schema<IProject>(
 );
 
 // 🔹 Auto-generate unique slug
-projectSchema.pre("save", async function (next) {
-  if (this.isModified("title")) {
+// projectSchema.pre("save", async function (next) {
+//   if (this.isModified("title")) {
+//     const baseSlug = this.title.toLowerCase().replace(/\s+/g, "-");
+//     let slug = baseSlug;
+//     let counter = 1;
+
+//     while (await Project.exists({ slug })) {
+//       slug = `${baseSlug}-${counter++}`;
+//     }
+//     this.slug = slug;
+//   }
+//   next();
+// });
+
+projectSchema.pre("validate", async function (next) {
+  if (this.isModified("title") || !this.slug) {
     const baseSlug = this.title.toLowerCase().replace(/\s+/g, "-");
     let slug = baseSlug;
     let counter = 1;
