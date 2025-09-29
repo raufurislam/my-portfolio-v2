@@ -46,6 +46,12 @@ const getAllBlogsScroll = async (query: Record<string, string>) => {
   return blogs;
 };
 
+const getFeaturedBlogs = async () => {
+  return await Blog.find({ isPublished: true, isFeatured: true })
+    .populate("author", "name email")
+    .sort({ createdAt: -1 });
+};
+
 const updateBlog = async (id: string, payload: Partial<IBlog>) => {
   return await Blog.findByIdAndUpdate(id, payload, { new: true });
 };
@@ -60,4 +66,5 @@ export const BlogServices = {
   getAllBlogsScroll,
   updateBlog,
   deleteBlog,
+  getFeaturedBlogs,
 };

@@ -65,10 +65,21 @@ const deleteBlog = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getFeaturedBlogs = catchAsync(async (req: Request, res: Response) => {
+  const blogs = await BlogServices.getFeaturedBlogs();
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Featured blogs retrieved successfully",
+    data: blogs,
+  });
+});
+
 export const BlogControllers = {
   createBlog,
   getBlogBySlug,
   getAllBlogsScroll,
   updateBlog,
   deleteBlog,
+  getFeaturedBlogs,
 };
