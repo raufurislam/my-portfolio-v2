@@ -1,12 +1,11 @@
-// blog.model.ts
 import { Schema, model } from "mongoose";
 import { IBlog } from "./blog.interface";
 
 const blogSchema = new Schema<IBlog>(
   {
     title: { type: String, required: true, trim: true },
-    slug: { type: String, required: true, unique: true, lowercase: true }, // SEO-friendly
-    content: { type: String, required: true }, // markdown/html from editor
+    slug: { type: String, required: true, unique: true, lowercase: true },
+    content: { type: String, required: true },
     thumbnail: { type: String },
     tags: [{ type: String, trim: true }],
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -21,15 +20,19 @@ const blogSchema = new Schema<IBlog>(
   }
 );
 
-blogSchema.pre("save", async function (next) {
+// Auto-generate unique slug
+blogSchema.pre("validate", async function (next) {
   if (this.isModified("title")) {
-    const baseSlug = this.title.toLowerCase().split(" ").join("-");
-    let slug = `${baseSlug}`;
-    let counter = 0;
-    while (await Blog.exist({ slug })) {
-      slug = `${slug}-${counter++}`;
+    const baseSlug = this.title.toLowerCase().trim().replace(/\s+/g, "-");
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (await Blog.exists({ slug })) {
+      slug = `${baseSlug}-${counter++}`;
     }
+    this.slug = slug;
   }
+  next();
 });
 
 export const Blog = model<IBlog>("Blog", blogSchema);
