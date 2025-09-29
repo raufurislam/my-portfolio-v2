@@ -35,4 +35,24 @@ blogSchema.pre("validate", async function (next) {
   next();
 });
 
+blogSchema.pre("findOneAndUpdate", async function (next) {
+  const blog = this.getUpdate() as Partial<IBlog>;
+
+  if (blog.title) {
+    const baseSlug = blog.title.toLowerCase().split(" ").join("-");
+    let slug = `${baseSlug}`;
+
+    let counter = 0;
+    while (await Blog.exists({ slug })) {
+      slug = `${slug}-${counter++}`;
+    }
+
+    blog.slug = slug;
+  }
+
+  this.setUpdate(blog);
+
+  next();
+});
+
 export const Blog = model<IBlog>("Blog", blogSchema);

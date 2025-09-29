@@ -7,7 +7,9 @@ const router = Router();
 
 router.post("/", checkAuth(Role.SUPER_ADMIN), BlogControllers.createBlog);
 router.get("/", BlogControllers.getAllBlogsScroll);
-
 router.get("/:slug", BlogControllers.getBlogBySlug);
+
+router.patch("/:id", checkAuth(Role.SUPER_ADMIN), BlogControllers.updateBlog);
+router.delete("/:id", checkAuth(Role.SUPER_ADMIN), BlogControllers.deleteBlog);
 
 export const BlogRoute = router;

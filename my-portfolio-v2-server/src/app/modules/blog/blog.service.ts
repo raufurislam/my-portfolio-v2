@@ -46,4 +46,18 @@ const getAllBlogsScroll = async (query: Record<string, string>) => {
   return blogs;
 };
 
-export const BlogServices = { createBlog, getBlogBySlug, getAllBlogsScroll };
+const updateBlog = async (id: string, payload: Partial<IBlog>) => {
+  return await Blog.findByIdAndUpdate(id, payload, { new: true });
+};
+
+const deleteBlog = async (id: string) => {
+  return await Blog.findByIdAndDelete(id);
+};
+
+export const BlogServices = {
+  createBlog,
+  getBlogBySlug,
+  getAllBlogsScroll,
+  updateBlog,
+  deleteBlog,
+};
