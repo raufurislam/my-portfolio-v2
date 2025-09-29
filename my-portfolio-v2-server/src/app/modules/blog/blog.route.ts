@@ -6,6 +6,8 @@ import { BlogControllers } from "./blog.controller";
 const router = Router();
 
 router.post("/", checkAuth(Role.SUPER_ADMIN), BlogControllers.createBlog);
+router.get("/", BlogControllers.getAllBlogsScroll);
+
 router.get("/:slug", BlogControllers.getBlogBySlug);
 
 export const BlogRoute = router;

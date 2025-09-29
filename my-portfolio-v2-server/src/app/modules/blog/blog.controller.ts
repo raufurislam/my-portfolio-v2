@@ -30,4 +30,17 @@ const getBlogBySlug = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const BlogControllers = { createBlog, getBlogBySlug };
+const getAllBlogsScroll = catchAsync(async (req: Request, res: Response) => {
+  const blogs = await BlogServices.getAllBlogsScroll(
+    req.query as Record<string, string>
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Blogs fetched successfully",
+    data: blogs,
+  });
+});
+
+export const BlogControllers = { createBlog, getBlogBySlug, getAllBlogsScroll };
