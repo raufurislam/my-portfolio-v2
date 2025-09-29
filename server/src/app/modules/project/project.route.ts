@@ -6,5 +6,7 @@ import { ProjectControllers } from "./project.controller";
 const router = Router();
 
 router.post("/", checkAuth(Role.SUPER_ADMIN), ProjectControllers.createProject);
+router.get("/", ProjectControllers.getAllProjectsScroll);
+router.get("/:slug", ProjectControllers.getProjectBySlug);
 
 export const ProjectRoute = router;
