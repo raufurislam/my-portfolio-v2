@@ -14,5 +14,10 @@ router.patch(
   checkAuth(Role.SUPER_ADMIN),
   ProjectControllers.updateProject
 );
+router.delete(
+  "/:id",
+  checkAuth(Role.SUPER_ADMIN),
+  ProjectControllers.deleteProject
+);
 
 export const ProjectRoute = router;

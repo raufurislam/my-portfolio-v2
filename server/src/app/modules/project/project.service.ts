@@ -56,10 +56,15 @@ const updateProject = async (id: string, payload: Partial<IProject>) => {
   return await Project.findByIdAndUpdate(id, payload, { new: true });
 };
 
+const deleteProject = async (id: string) => {
+  return await Project.findByIdAndDelete(id);
+};
+
 export const ProjectServices = {
   createProject,
   getProjectBySlug,
   getAllProjectsScroll,
   getFeaturedProjects,
   updateProject,
+  deleteProject,
 };
