@@ -9,5 +9,10 @@ router.post("/", checkAuth(Role.SUPER_ADMIN), ProjectControllers.createProject);
 router.get("/", ProjectControllers.getAllProjectsScroll);
 router.get("/featured", ProjectControllers.getFeaturedProjects);
 router.get("/:slug", ProjectControllers.getProjectBySlug);
+router.patch(
+  "/:id",
+  checkAuth(Role.SUPER_ADMIN),
+  ProjectControllers.updateProject
+);
 
 export const ProjectRoute = router;

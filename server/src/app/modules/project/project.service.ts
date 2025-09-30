@@ -52,9 +52,14 @@ const getFeaturedProjects = async () => {
     .sort({ createdAt: -1 });
 };
 
+const updateProject = async (id: string, payload: Partial<IProject>) => {
+  return await Project.findByIdAndUpdate(id, payload, { new: true });
+};
+
 export const ProjectServices = {
   createProject,
   getProjectBySlug,
   getAllProjectsScroll,
   getFeaturedProjects,
+  updateProject,
 };
