@@ -1,44 +1,48 @@
 # B5A7 - Portfolio
 
----src/
-├── app/
-│ ├── (public)/ # Public routes
-│ │ ├── layout.tsx # Public layout
-│ │ ├── page.tsx # Homepage (About + Projects + Blogs preview)
-│ │ ├── blogs/
-│ │ │ ├── page.tsx # All blogs page (ISR)
-│ │ │ ├── [id]/ # Dynamic route for blog details
-│ │ │ │ └── page.tsx # Single blog details (ISR + getStaticPaths)
-│ │ ├── projects/
-│ │ │ └── page.tsx # Projects showcase page (ISR)
-│ │ ├── about/
-│ │ │ └── page.tsx # About me page (SSG)
-│ │
-│ ├── (dashboard)/ # Protected routes (Owner only)
-│ │ ├── layout.tsx # Dashboard layout
-│ │ ├── page.tsx # Dashboard home
-│ │ ├── blogs/
-│ │ │ ├── page.tsx # Blog management (CRUD UI)
-│ │ ├── projects/
-│ │ │ ├── page.tsx # Project management (CRUD UI)
-│ │
-│ ├── login/
-│ │ └── page.tsx # Login page (JWT)
-│ ├── layout.tsx
-│ └── globals.css
-│
-├── components/
-│ ├── ui/ # Reusable UI components (Button, Card, Input, Modal, etc.)
-│ ├── blog/ # Blog-specific components
-│ ├── project/ # Project-specific components
-│ ├── dashboard/ # Dashboard-specific UI components
-│ └── layout/ # Navbar, Footer, Sidebar
-│
-├── hooks/ # Custom hooks (auth, fetch, etc.)
-├── lib/ # API utils (axios/fetch wrapper, constants)
-├── types/ # TypeScript interfaces (Blog, Project, User)
-├── utils/ # Helper functions
-└── middleware.ts # Route protection middleware
+---
+
+```bash
+src/
+ ├── app/
+ │   ├── (public)/                        # Public routes
+ │   │   ├── layout.tsx                   # Public layout
+ │   │   ├── page.tsx                     # Homepage (About + Projects + Blogs preview)
+ │   │   ├── blogs/
+ │   │   │   ├── page.tsx                 # All blogs page (ISR)
+ │   │   │   ├── [id]/                    # Dynamic route for blog details
+ │   │   │   │   └── page.tsx             # Single blog details (ISR + getStaticPaths)
+ │   │   ├── projects/
+ │   │   │   └── page.tsx                 # Projects showcase page (ISR)
+ │   │   ├── about/
+ │   │   │   └── page.tsx                 # About me page (SSG)
+ │   │
+ │   ├── (dashboard)/                     # Protected routes (Owner only)
+ │   │   ├── layout.tsx                   # Dashboard layout
+ │   │   ├── page.tsx                     # Dashboard home
+ │   │   ├── blogs/
+ │   │   │   ├── page.tsx                 # Blog management (CRUD UI)
+ │   │   ├── projects/
+ │   │   │   ├── page.tsx                 # Project management (CRUD UI)
+ │   │
+ │   ├── login/
+ │   │   └── page.tsx                     # Login page (JWT)
+ │   ├── layout.tsx
+ │   └── globals.css
+ │
+ ├── components/
+ │   ├── ui/                              # Reusable UI components (Button, Card, Input, Modal, etc.)
+ │   ├── blog/                            # Blog-specific components
+ │   ├── project/                         # Project-specific components
+ │   ├── dashboard/                       # Dashboard-specific UI components
+ │   └── layout/                          # Navbar, Footer, Sidebar
+ │
+ ├── hooks/                               # Custom hooks (auth, fetch, etc.)
+ ├── lib/                                 # API utils (axios/fetch wrapper, constants)
+ ├── types/                               # TypeScript interfaces (Blog, Project, User)
+ ├── utils/                               # Helper functions
+ └── middleware.ts                        # Route protection middleware
+```
 
 ## 🌐 My Portfolio Website – Requirements (NextJS + Prisma + ExpressJS)
 
