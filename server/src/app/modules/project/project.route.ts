@@ -6,5 +6,18 @@ import { ProjectControllers } from "./project.controller";
 const router = Router();
 
 router.post("/", checkAuth(Role.SUPER_ADMIN), ProjectControllers.createProject);
+router.get("/", ProjectControllers.getAllProjectsScroll);
+router.get("/featured", ProjectControllers.getFeaturedProjects);
+router.get("/:slug", ProjectControllers.getProjectBySlug);
+router.patch(
+  "/:id",
+  checkAuth(Role.SUPER_ADMIN),
+  ProjectControllers.updateProject
+);
+router.delete(
+  "/:id",
+  checkAuth(Role.SUPER_ADMIN),
+  ProjectControllers.deleteProject
+);
 
 export const ProjectRoute = router;

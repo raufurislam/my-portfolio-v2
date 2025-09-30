@@ -19,4 +19,68 @@ const createProject = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const ProjectControllers = { createProject };
+const getProjectBySlug = catchAsync(async (req: Request, res: Response) => {
+  const project = await ProjectServices.getProjectBySlug(req.params.slug);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Project fetched successfully",
+    data: project,
+  });
+});
+
+const getAllProjectsScroll = catchAsync(async (req: Request, res: Response) => {
+  const projects = await ProjectServices.getAllProjectsScroll(
+    req.query as Record<string, string>
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Projects fetched successfully",
+    data: projects,
+  });
+});
+
+const getFeaturedProjects = catchAsync(async (req: Request, res: Response) => {
+  const projects = await ProjectServices.getFeaturedProjects();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Featured projects retrieved successfully",
+    data: projects,
+  });
+});
+
+const updateProject = catchAsync(async (req: Request, res: Response) => {
+  const project = await ProjectServices.updateProject(req.params.id, req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Project updated successfully",
+    data: project,
+  });
+});
+
+const deleteProject = catchAsync(async (req: Request, res: Response) => {
+  const project = await ProjectServices.deleteProject(req.params.id);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Project deleted successfully",
+    data: project,
+  });
+});
+
+export const ProjectControllers = {
+  createProject,
+  getAllProjectsScroll,
+  getProjectBySlug,
+  getFeaturedProjects,
+  updateProject,
+  deleteProject,
+};
