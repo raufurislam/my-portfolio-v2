@@ -46,8 +46,15 @@ const getAllProjectsScroll = async (query: Record<string, string>) => {
   return projects;
 };
 
+const getFeaturedProjects = async () => {
+  return await Project.find({ isPublished: true, isFeatured: true })
+    .populate("author", "name email")
+    .sort({ createdAt: -1 });
+};
+
 export const ProjectServices = {
   createProject,
   getProjectBySlug,
   getAllProjectsScroll,
+  getFeaturedProjects,
 };

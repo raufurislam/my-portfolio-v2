@@ -43,8 +43,20 @@ const getAllProjectsScroll = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getFeaturedProjects = catchAsync(async (req: Request, res: Response) => {
+  const projects = await ProjectServices.getFeaturedProjects();
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Featured projects retrieved successfully",
+    data: projects,
+  });
+});
+
 export const ProjectControllers = {
   createProject,
   getAllProjectsScroll,
   getProjectBySlug,
+  getFeaturedProjects,
 };
