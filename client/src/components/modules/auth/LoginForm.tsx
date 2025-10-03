@@ -1,16 +1,18 @@
 "use client";
 
-import { login } from "@/actions/auth";
+// import { login } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Password from "@/components/ui/Password";
 import Image from "next/image";
 import Link from "next/link";
 import { FieldValues, useForm } from "react-hook-form";
@@ -30,18 +32,20 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values: FieldValues) => {
-    try {
-      // const res = await login(values);
-      // if (res?.id) {
-      //   toast.success("User Logged in Successfully");
-      // } else {
-      //   toast.error("User Login Failed");
-      // }
+    console.log("Login Submitted:", values);
 
-      signIn("credentials", { ...values, callbackUrl: "/dashboard" });
-    } catch (err) {
-      console.error(err);
-    }
+    // try {
+    //   // const res = await login(values);
+    //   // if (res?.id) {
+    //   //   toast.success("User Logged in Successfully");
+    //   // } else {
+    //   //   toast.error("User Login Failed");
+    //   // }
+
+    //   signIn("credentials", { ...values, callbackUrl: "/dashboard" });
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   const handleSocialLogin = (provider: "google" | "github") => {
@@ -79,7 +83,6 @@ export default function LoginForm() {
               )}
             />
 
-            {/* Password */}
             <FormField
               control={form.control}
               name="password"
@@ -87,12 +90,11 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Enter your password"
-                      {...field}
-                    />
+                    <Password {...field} />
                   </FormControl>
+                  <FormDescription className="sr-only">
+                    This is your Password.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -130,11 +132,11 @@ export default function LoginForm() {
           <Button
             variant="outline"
             className="flex items-center justify-center gap-2"
-            onClick={() =>
-              signIn("google", {
-                callbackUrl: "/dashboard",
-              })
-            }
+            // onClick={() =>
+            //   signIn("google", {
+            //     callbackUrl: "/dashboard",
+            //   })
+            // }
           >
             {/* Google */}
             <Image

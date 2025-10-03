@@ -1,15 +1,17 @@
 "use client";
-import { register } from "@/actions/auth";
+// import { register } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Password from "@/components/ui/Password";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
@@ -29,21 +31,21 @@ export default function RegisterForm() {
       name: "",
       email: "",
       password: "",
-      phone: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = async (values: FieldValues) => {
-    // console.log("Register Submitted:", values);
-    try {
-      const res = await register(values);
-      if (res?.id) {
-        toast.success("User Registered Successfully");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("User Registration failed. Please try again.");
-    }
+    console.log("Register Submitted:", values);
+    // try {
+    //   const res = await register(values);
+    //   if (res?.id) {
+    //     toast.success("User Registered Successfully");
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    //   toast.error("User Registration failed. Please try again.");
+    // }
   };
 
   return (
@@ -51,7 +53,7 @@ export default function RegisterForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 w-full max-w-md bg-white p-8 rounded-lg shadow-md"
+          className="space-y-6 w-full max-w-md bg-white p-8 rounded-2xl shadow-md"
         >
           <h2 className="text-3xl font-bold text-center">Register Now</h2>
           {/* Name */}
@@ -86,21 +88,6 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          {/* Phone */}
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your phone number" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* Password */}
           <FormField
             control={form.control}
             name="password"
@@ -108,12 +95,28 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Enter your password"
-                    {...field}
-                  />
+                  <Password {...field} />
                 </FormControl>
+                <FormDescription className="sr-only">
+                  This is your public display name.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Password {...field} />
+                </FormControl>
+                <FormDescription className="sr-only">
+                  This is your public display name.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
