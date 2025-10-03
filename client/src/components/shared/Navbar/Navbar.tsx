@@ -30,29 +30,22 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { LogOut, User, Settings } from "lucide-react";
-import Logo from "@/assets/icons/Logo";
 import { toast } from "sonner";
 import { ModeToggle } from "../ModeToggler";
+import Image from "next/image";
 
 // Example roles (replace with your constants)
 const role = {
-  admin: "ADMIN",
   superAdmin: "SUPER_ADMIN",
-  rider: "RIDER",
-  driver: "DRIVER",
+  user: "USER",
 };
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
-  { href: "/about", label: "About", role: "PUBLIC" },
-  { href: "/features", label: "Features", role: "PUBLIC" },
-  { href: "/contact", label: "Contact", role: "PUBLIC" },
-  { href: "/faq", label: "FAQ", role: "PUBLIC" },
+  { href: "/blogs", label: "Blogs", role: "PUBLIC" },
+  { href: "/projects", label: "Projects", role: "PUBLIC" },
 
-  { href: "/admin", label: "Dashboard", role: role.admin },
   { href: "/admin", label: "Dashboard", role: role.superAdmin },
-  { href: "/rider", label: "Dashboard", role: role.rider },
-  { href: "/driver", label: "Dashboard", role: role.driver },
 ];
 
 export default function Navbar() {
@@ -61,13 +54,13 @@ export default function Navbar() {
 
   // Example user data (replace with your auth context / API)
   const data = {
-    data: {
-      email: "john@example.com",
-      name: "John Doe",
-      role: "ADMIN",
-      picture: "",
-      auths: [{ provider: "google" }],
-    },
+    // data: {
+    //   email: "john@example.com",
+    //   name: "John Doe",
+    //   role: "ADMIN",
+    //   picture: "",
+    //   auths: [{ provider: "google" }],
+    // },
   };
 
   const handleLogout = async () => {
@@ -161,9 +154,15 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="text-primary hover:text-primary/90">
             <span className="inline-flex items-center gap-2">
-              <Logo size={50} />
+              <Image
+                src="https://i.ibb.co.com/qYC6YkKw/logo-12.png"
+                alt="GitHub"
+                className="w-5 h-5"
+                width={20}
+                height={20}
+              />
               <span className="hidden sm:inline text-base font-semibold text-foreground">
-                RideExpress
+                Raufur Islam
               </span>
             </span>
           </Link>

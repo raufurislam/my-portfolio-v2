@@ -49,11 +49,11 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
+    <div className="flex justify-center items-center min-h-screen">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 w-full max-w-md bg-white p-8 rounded-2xl shadow-md"
+          className="space-y-6 w-full max-w-md bg-card p-8 rounded-2xl shadow-md"
         >
           <h2 className="text-3xl font-bold text-center">Register Now</h2>
           {/* Name */}
