@@ -21,7 +21,6 @@ export default async function FeaturedBlogs() {
             See all
           </Link>
         </div>
-
         {/* Hero: 1 large + 2 secondary */}
         {featured.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -97,13 +96,15 @@ export default async function FeaturedBlogs() {
             </div>
           </div>
         )}
-
-        {/* Grid */}
+        {/* Grid
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mt-16 text-center">
+          Featured Posts
+        </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {rest?.slice(0, 6).map((blog: any) => (
             <BlogCard key={blog._id} post={blog} />
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );
