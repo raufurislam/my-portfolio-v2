@@ -25,7 +25,7 @@ export default function BlogCard({ post }: BlogCardProps) {
   return (
     <div className="group rounded-2xl border bg-card shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
       {/* Thumbnail */}
-      <Link href={`/blogs/${post.slug}`} className="relative block h-48 w-full">
+      <Link href={`/blog/${post.slug}`} className="relative block h-48 w-full">
         <Image
           src={post.thumbnail}
           alt={post.title}
