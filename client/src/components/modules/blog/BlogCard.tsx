@@ -23,47 +23,47 @@ export interface BlogCardProps {
 
 export default function BlogCard({ post }: BlogCardProps) {
   return (
-    <div className="group rounded-2xl border bg-card shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col">
+    <div className="group rounded-2xl border bg-card shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
       {/* Thumbnail */}
-      <Link href={`/blog/${post.slug}`} className="relative block h-48 w-full">
-        <Image
-          src={post.thumbnail}
-          alt={post.title}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
-        />
+      <Link href={`/blogs/${post.slug}`} className="relative block w-full">
+        <div className="relative h-52 w-full overflow-hidden">
+          <Image
+            src={post.thumbnail}
+            alt={post.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={false}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+            {post.tags.slice(0, 2).map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-full bg-primary/90 text-primary-foreground px-2.5 py-0.5 text-[10px] font-semibold shadow-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
       </Link>
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-3">
-          {post.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Title */}
         <Link href={`/blogs/${post.slug}`}>
-          <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="text-lg md:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
             {post.title}
           </h3>
         </Link>
 
-        {/* Description */}
         <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
           {post.content}
         </p>
 
-        {/* Footer */}
-        <div className="mt-auto flex items-center justify-between pt-4 text-sm text-muted-foreground border-t">
+        <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span className="font-medium text-foreground">
+            <span className="inline-flex h-6 items-center rounded-full bg-muted px-2 font-medium text-foreground">
               {post.author.name}
             </span>
           </div>
