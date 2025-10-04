@@ -1,5 +1,5 @@
 "use client";
-// import { register } from "@/actions/auth";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,20 +13,34 @@ import {
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
-import { FieldValues, useForm } from "react-hook-form";
-// import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useAuth } from "@/hooks/useAuth";
+import { IRegisterCredentials } from "@/types";
 
-// type RegisterFormValues = {
-//   name: string;
-//   email: string;
-//   phone: string;
-//   password: string;
-// };
+// Validation schema
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterForm() {
-  // const router = useRouter();
-  const form = useForm<FieldValues>({
+  const { register, isLoading } = useAuth();
+
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -35,17 +49,13 @@ export default function RegisterForm() {
     },
   });
 
-  const onSubmit = async (values: FieldValues) => {
-    console.log("Register Submitted:", values);
-    // try {
-    //   const res = await register(values);
-    //   if (res?.id) {
-    //     toast.success("User Registered Successfully");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error("User Registration failed. Please try again.");
-    // }
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      await register(values as IRegisterCredentials);
+    } catch (error: any) {
+      // Error is already handled in the AuthContext
+      console.error("Registration error:", error);
+    }
   };
 
   return (
@@ -64,7 +74,11 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your name" {...field} />
+                  <Input
+                    placeholder="Enter your name"
+                    disabled={isLoading}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -81,6 +95,7 @@ export default function RegisterForm() {
                   <Input
                     type="email"
                     placeholder="Enter your email"
+                    disabled={isLoading}
                     {...field}
                   />
                 </FormControl>
@@ -95,10 +110,10 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Password {...field} />
+                  <Password disabled={isLoading} {...field} />
                 </FormControl>
                 <FormDescription className="sr-only">
-                  This is your public display name.
+                  This is your password.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -112,18 +127,18 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Password {...field} />
+                  <Password disabled={isLoading} {...field} />
                 </FormControl>
                 <FormDescription className="sr-only">
-                  This is your public display name.
+                  Confirm your password.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full mt-2">
-            Register
+          <Button type="submit" className="w-full mt-2" disabled={isLoading}>
+            {isLoading ? "Registering..." : "Register"}
           </Button>
 
           <p className="text-center text-sm text-gray-500 mt-4">
