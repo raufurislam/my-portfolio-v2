@@ -7,7 +7,7 @@ export default async function FeaturedBlogs() {
   });
   const { data: blogs } = await res.json();
   const featured = (blogs ?? []).slice(0, 3);
-  const rest = (blogs ?? []).slice(3);
+  // const rest = (blogs ?? []).slice(3);
 
   return (
     <section className="my-12">

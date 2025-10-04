@@ -13,9 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { FieldValues, useForm } from "react-hook-form";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 // type RegisterFormValues = {
 //   name: string;
@@ -25,7 +25,7 @@ import { toast } from "sonner";
 // };
 
 export default function RegisterForm() {
-  const router = useRouter();
+  // const router = useRouter();
   const form = useForm<FieldValues>({
     defaultValues: {
       name: "",
