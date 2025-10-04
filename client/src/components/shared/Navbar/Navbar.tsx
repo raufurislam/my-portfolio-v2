@@ -30,9 +30,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { LogOut, User, Settings } from "lucide-react";
-import { toast } from "sonner";
 import { ModeToggle } from "../ModeToggler";
 import Image from "next/image";
+import { useAuth } from "@/hooks/useAuth";
 
 // Example roles (replace with your constants)
 const role = {
@@ -44,33 +44,23 @@ const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/blogs", label: "Blogs", role: "PUBLIC" },
   { href: "/projects", label: "Projects", role: "PUBLIC" },
-
-  { href: "/admin", label: "Dashboard", role: role.superAdmin },
+  { href: "/dashboard", label: "Dashboard", role: "SUPER_ADMIN" },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-
-  // Example user data (replace with your auth context / API)
-  const data = {
-    // data: {
-    //   email: "john@example.com",
-    //   name: "John Doe",
-    //   role: "ADMIN",
-    //   picture: "",
-    //   auths: [{ provider: "google" }],
-    // },
-  };
+  const { user, logout, isAuthenticated, isLoading, isSuperAdmin } = useAuth();
 
   const handleLogout = async () => {
-    toast.success("Logged out successfully");
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const getUserInitial = (name: string) => name.charAt(0).toUpperCase();
-  const hasGooglePicture = data?.data?.auths?.some(
-    (auth) => auth.provider === "google"
-  );
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -80,8 +70,8 @@ export default function Navbar() {
   }, []);
 
   const publicLinks = navigationLinks.filter((l) => l.role === "PUBLIC");
-  const privateLinks = navigationLinks.filter(
-    (l) => l.role !== "PUBLIC" && l.role === data?.data?.role
+  const superAdminLinks = navigationLinks.filter(
+    (l) => l.role === "SUPER_ADMIN" && isSuperAdmin
   );
 
   return (
@@ -127,7 +117,8 @@ export default function Navbar() {
                   {navigationLinks
                     .filter(
                       (link) =>
-                        link.role === "PUBLIC" || link.role === data?.data?.role
+                        link.role === "PUBLIC" ||
+                        (link.role === "SUPER_ADMIN" && isSuperAdmin)
                     )
                     .map((link) => (
                       <NavigationMenuItem key={link.href} className="w-full">
@@ -171,7 +162,7 @@ export default function Navbar() {
         {/* Desktop nav */}
         <NavigationMenu className="hidden lg:block">
           <NavigationMenuList className="gap-2">
-            {[...publicLinks, ...privateLinks].map((link) => (
+            {[...publicLinks, ...superAdminLinks].map((link) => (
               <NavigationMenuItem key={link.href}>
                 <NavigationMenuLink
                   asChild
@@ -197,7 +188,7 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-3">
           <ModeToggle />
-          {data?.data?.email ? (
+          {isAuthenticated && user ? (
             <TooltipProvider>
               <DropdownMenu>
                 <Tooltip>
@@ -208,53 +199,36 @@ export default function Navbar() {
                         className="relative h-10 w-10 rounded-full p-0 hover:bg-accent transition-colors"
                       >
                         <Avatar className="h-10 w-10">
-                          {data?.data?.picture ? (
-                            <AvatarImage
-                              src={data.data.picture}
-                              alt={data.data.name}
-                            />
-                          ) : null}
                           <AvatarFallback className="bg-primary/10 text-primary font-semibold text-lg">
-                            {getUserInitial(data?.data?.name || "U")}
+                            {getUserInitial(user?.name || user?.email || "U")}
                           </AvatarFallback>
                         </Avatar>
                       </Button>
                     </DropdownMenuTrigger>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{data.data.name}</p>
+                    <p>{user?.name || user?.email}</p>
                   </TooltipContent>
                 </Tooltip>
 
                 <DropdownMenuContent className="w-80 p-4" align="end">
                   <div className="flex items-center gap-3 pb-3">
                     <Avatar className="h-12 w-12">
-                      {data?.data?.picture ? (
-                        <AvatarImage
-                          src={data.data.picture}
-                          alt={data.data.name}
-                        />
-                      ) : null}
                       <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xl">
-                        {getUserInitial(data?.data?.name || "U")}
+                        {getUserInitial(user?.name || user?.email || "U")}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-foreground truncate">
-                        {data.data.name}
+                        {user?.name || "User"}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {data.data.email}
+                        {user?.email}
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                          {data.data.role}
+                          {user?.role}
                         </span>
-                        {hasGooglePicture && (
-                          <span className="inline-flex items-center rounded-full bg-blue-100 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
-                            Google
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>

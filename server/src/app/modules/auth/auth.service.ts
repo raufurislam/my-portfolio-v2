@@ -80,4 +80,17 @@ const changePassword = async (
   user!.save();
 };
 
-export const AuthServices = { getNewAccessToken, setPassword, changePassword };
+const getMe = async (userId: string) => {
+  const user = await User.findById(userId);
+  // .select("-password");
+  return {
+    data: user,
+  };
+};
+
+export const AuthServices = {
+  getNewAccessToken,
+  setPassword,
+  changePassword,
+  getMe,
+};

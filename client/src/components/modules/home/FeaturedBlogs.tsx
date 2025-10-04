@@ -1,4 +1,4 @@
-import BlogCard from "../blog/BlogCard";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ export default async function FeaturedBlogs() {
   });
   const { data: blogs } = await res.json();
   const featured = (blogs ?? []).slice(0, 3);
-  const rest = (blogs ?? []).slice(3);
+  // const rest = (blogs ?? []).slice(3);
 
   return (
     <section className="my-12">
@@ -21,7 +21,6 @@ export default async function FeaturedBlogs() {
             See all
           </Link>
         </div>
-
         {/* Hero: 1 large + 2 secondary */}
         {featured.length > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -36,9 +35,9 @@ export default async function FeaturedBlogs() {
                   alt={featured[0].title}
                   fill
                   priority
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105 rounded-3xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent rounded-3xl" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
                   <div className="flex flex-wrap gap-2 mb-3">
                     {featured[0].tags?.slice(0, 3).map((tag: string) => (
@@ -97,13 +96,15 @@ export default async function FeaturedBlogs() {
             </div>
           </div>
         )}
-
-        {/* Grid */}
+        {/* Grid
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mt-16 text-center">
+          Featured Posts
+        </h2>
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {rest?.slice(0, 6).map((blog: any) => (
             <BlogCard key={blog._id} post={blog} />
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

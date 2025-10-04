@@ -10,6 +10,7 @@ const router = Router();
 router.post("/login", AuthControllers.credentialsLogin);
 router.post("/logout", AuthControllers.logout);
 router.post("/refresh-token", AuthControllers.getNewAccessToken);
+router.get("/me", checkAuth(...Object.values(Role)), AuthControllers.getMe);
 
 router.post(
   "/set-password",

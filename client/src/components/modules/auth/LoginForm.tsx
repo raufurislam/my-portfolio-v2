@@ -1,6 +1,5 @@
 "use client";
 
-// import { login } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,43 +14,47 @@ import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import Image from "next/image";
 import Link from "next/link";
-import { FieldValues, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useAuth } from "@/hooks/useAuth";
+import { ILoginCredentials } from "@/types";
 
-// type LoginFormValues = {
-//   email: string;
-//   password: string;
-// };
+// Validation schema
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
-  const form = useForm<FieldValues>({
+  const { login, isLoading } = useAuth();
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (values: FieldValues) => {
-    console.log("Login Submitted:", values);
-
-    // try {
-    //   // const res = await login(values);
-    //   // if (res?.id) {
-    //   //   toast.success("User Logged in Successfully");
-    //   // } else {
-    //   //   toast.error("User Login Failed");
-    //   // }
-
-    //   signIn("credentials", { ...values, callbackUrl: "/dashboard" });
-    // } catch (err) {
-    //   console.error(err);
-    // }
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      await login(values as ILoginCredentials);
+    } catch (error: any) {
+      // Error is already handled in the AuthContext
+      console.error("Login error:", error);
+    }
   };
 
-  const handleSocialLogin = (provider: "google" | "github") => {
-    console.log(`Login with provider ${provider}`);
-
-    // signIn();
+  const handleGoogleLogin = () => {
+    // Redirect to Google OAuth endpoint
+    const redirectUrl =
+      new URLSearchParams(window.location.search).get("redirect") || "/";
+    window.location.href = `${
+      process.env.NEXT_PUBLIC_BASE_API
+    }/auth/google?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
   return (
@@ -75,6 +78,7 @@ export default function LoginForm() {
                     <Input
                       type="email"
                       placeholder="Enter your email"
+                      disabled={isLoading}
                       {...field}
                     />
                   </FormControl>
@@ -90,7 +94,7 @@ export default function LoginForm() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Password {...field} />
+                    <Password disabled={isLoading} {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
                     This is your Password.
@@ -100,8 +104,8 @@ export default function LoginForm() {
               )}
             />
 
-            <Button type="submit" className="w-full mt-2">
-              Login
+            <Button type="submit" className="w-full mt-2" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
 
             <div className="flex items-center justify-center space-x-2">
@@ -116,11 +120,8 @@ export default function LoginForm() {
           <Button
             variant="outline"
             className="flex items-center justify-center gap-2"
-            // onClick={() =>
-            //   signIn("google", {
-            //     callbackUrl: "/dashboard",
-            //   })
-            // }
+            onClick={handleGoogleLogin}
+            disabled={isLoading}
           >
             {/* Google */}
             <Image
@@ -134,7 +135,7 @@ export default function LoginForm() {
           </Button>
         </div>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link href="/register" className="text-blue-500 hover:underline">
             Register
           </Link>

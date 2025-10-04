@@ -147,6 +147,20 @@ const changePassword = catchAsync(
   }
 );
 
+const getMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const decodedToken = req.user as JwtPayload;
+    const result = await AuthServices.getMe(decodedToken.userId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Your Profile Retrieved Successfully",
+      data: result.data,
+    });
+  }
+);
+
 export const AuthControllers = {
   credentialsLogin,
   googleCallbackController,
@@ -154,4 +168,5 @@ export const AuthControllers = {
   getNewAccessToken,
   setPassword,
   changePassword,
+  getMe,
 };

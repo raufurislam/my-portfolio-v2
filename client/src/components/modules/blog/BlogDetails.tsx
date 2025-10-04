@@ -48,6 +48,7 @@ export default function BlogDetails({ blog }: BlogDetailsProps) {
         sessionStorage.setItem(sessionKey, "1");
       } catch (err) {
         // Soft fail: keep optimistic value
+        console.log(err);
       }
     };
     persist();
