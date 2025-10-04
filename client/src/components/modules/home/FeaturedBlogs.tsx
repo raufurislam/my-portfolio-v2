@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Image from "next/image";
 import Link from "next/link";
 
@@ -34,9 +35,9 @@ export default async function FeaturedBlogs() {
                   alt={featured[0].title}
                   fill
                   priority
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105 rounded-3xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent rounded-3xl" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
                   <div className="flex flex-wrap gap-2 mb-3">
                     {featured[0].tags?.slice(0, 3).map((tag: string) => (
