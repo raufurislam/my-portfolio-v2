@@ -54,13 +54,13 @@ export default function Navbar() {
 
   // Example user data (replace with your auth context / API)
   const data = {
-    // data: {
-    //   email: "john@example.com",
-    //   name: "John Doe",
-    //   role: "ADMIN",
-    //   picture: "",
-    //   auths: [{ provider: "google" }],
-    // },
+    data: {
+      email: "john@example.com",
+      name: "John Doe",
+      role: "ADMIN",
+      picture: "",
+      auths: [{ provider: "google" }],
+    },
   };
 
   const handleLogout = async () => {

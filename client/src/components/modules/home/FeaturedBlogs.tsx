@@ -1,4 +1,3 @@
-import BlogCard from "../blog/BlogCard";
 import Image from "next/image";
 import Link from "next/link";
 

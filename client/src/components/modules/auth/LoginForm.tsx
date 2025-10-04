@@ -16,7 +16,6 @@ import Password from "@/components/ui/Password";
 import Image from "next/image";
 import Link from "next/link";
 import { FieldValues, useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 // type LoginFormValues = {
 //   email: string;
@@ -48,11 +47,11 @@ export default function LoginForm() {
     // }
   };
 
-  const handleSocialLogin = (provider: "google" | "github") => {
-    console.log(`Login with provider ${provider}`);
+  // const handleSocialLogin = (provider: "google" | "github") => {
+  //   console.log(`Login with provider ${provider}`);
 
-    // signIn();
-  };
+  //   // signIn();
+  // };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
