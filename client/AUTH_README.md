@@ -169,7 +169,7 @@ The frontend expects the backend to:
    - Email: `super@gmail.com`
    - Password: `753951Bd@`
 5. You should be redirected to `/` (home page) upon successful login
-6. Only super admin (Raufur Islam) will see the Dashboard option in navigation
+6. Only super admin (Super admin) will see the Dashboard option in navigation
 7. Try registering a new user - they will also be redirected to home page
 
 ## Troubleshooting

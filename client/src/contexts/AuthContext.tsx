@@ -30,7 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const isAuthenticated = !!user;
   const isSuperAdmin =
-    user?.role === "SUPER_ADMIN" && user?.name === "Raufur Islam";
+    user?.role === "SUPER_ADMIN" && user?.name === "Super admin";
 
   // Initialize auth state on mount
   useEffect(() => {
@@ -79,16 +79,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const register = async (credentials: IRegisterCredentials) => {
     try {
       setIsLoading(true);
-      const response = await authService.register(credentials);
+      // Step 1: Register the user
+      const registerResponse = await authService.register(credentials);
 
-      if (response.success && response.data.user) {
-        setUser(response.data.user);
-        toast.success(response.message || "Registration successful!");
+      if (registerResponse.success) {
+        toast.success(registerResponse.message || "Registration successful!");
+
+        // Step 2: Auto-login after successful registration
+        try {
+          const loginResponse = await authService.login({
+            email: credentials.email,
+            password: credentials.password,
+          });
+
+          if (loginResponse.success && loginResponse.data.user) {
+            setUser(loginResponse.data.user);
+            toast.success("Welcome! You are now logged in.");
+          }
+        } catch (loginError: any) {
+          // Registration successful but auto-login failed
+          toast.success("Registration successful! Please login manually.");
+          router.push("/login");
+          return;
+        }
 
         // Redirect to home page
         router.push("/");
       } else {
-        throw new Error(response.message || "Registration failed");
+        throw new Error(registerResponse.message || "Registration failed");
       }
     } catch (error: any) {
       console.error("Registration error:", error);

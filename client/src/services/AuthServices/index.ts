@@ -34,7 +34,7 @@ class AuthService {
   }
 
   async register(credentials: IRegisterCredentials): Promise<IRegisterResponse> {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    const response = await fetch(`${API_BASE_URL}/user/register`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -60,9 +60,9 @@ class AuthService {
 
   async refreshAccessToken(): Promise<IAuthTokens> {
     const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
-      method: "POST",
-      credentials: "include",
-    });
+    method: "POST",
+    credentials: "include",
+  });
 
     return this.handleResponse<IApiResponse<IAuthTokens>>(response).then(
       (res) => res.data

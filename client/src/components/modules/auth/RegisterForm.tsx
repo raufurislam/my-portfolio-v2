@@ -51,7 +51,9 @@ export default function RegisterForm() {
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      await register(values as IRegisterCredentials);
+      // Send only the required fields to backend (no confirmPassword)
+      const { confirmPassword, ...registrationData } = values;
+      await register(registrationData as IRegisterCredentials);
     } catch (error: any) {
       // Error is already handled in the AuthContext
       console.error("Registration error:", error);

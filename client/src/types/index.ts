@@ -78,11 +78,7 @@ export interface IRegisterResponse {
   success: boolean;
   statusCode: number;
   message: string;
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    user: IUser;
-  };
+  data: IUser;
 }
 
 export interface IAuthContext {
