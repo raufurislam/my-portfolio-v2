@@ -14,11 +14,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "@/assets/icons/Logo";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import { NavUser } from "@/components/ui/nav-user";
 
 type NavItem = {
   title: string;
@@ -32,7 +32,7 @@ type NavSection = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
-  const { user, isSuperAdmin } = useAuth();
+  const { isSuperAdmin } = useAuth();
 
   // Build sections based on role. Only super admin gets dashboard links
   const sections: NavSection[] = isSuperAdmin
@@ -44,8 +44,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {
           title: "Management",
           items: [
-            { title: "Projects", url: "/dashboard/projects" },
-            { title: "Blogs", url: "/dashboard/blogs" },
+            { title: "Manage Projects", url: "/projects" },
+            { title: "Manage Blogs", url: "/blogs" },
+            { title: "Manage Users", url: "/users" },
+            // { title: "Blogs", url: "/dashboard/blogs" },
           ],
         },
       ]
@@ -93,14 +95,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarRail />
       <SidebarFooter>
-        <div className="px-2 py-1.5 text-sm">
-          <p className="font-medium truncate">
-            {user?.name || user?.email || "Guest"}
-          </p>
-          {user?.email ? (
-            <p className="text-muted-foreground truncate">{user.email}</p>
-          ) : null}
-        </div>
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );

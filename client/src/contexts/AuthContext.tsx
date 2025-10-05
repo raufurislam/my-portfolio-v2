@@ -123,13 +123,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await authService.logout();
       setUser(null);
       toast.success("Logged out successfully");
-      router.push("/login");
+      router.push("/");
     } catch (error: any) {
       console.error("Logout error:", error);
       // Even if logout fails on server, clear local state
       setUser(null);
       toast.success("Logged out successfully");
-      router.push("/login");
+      router.push("/");
     } finally {
       setIsLoading(false);
     }

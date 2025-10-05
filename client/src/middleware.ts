@@ -19,11 +19,9 @@ export function middleware(request: NextRequest) {
   // Get the access token from cookies
   const accessToken = request.cookies.get("accessToken")?.value;
 
-  // If accessing a protected route without a token, redirect to login
+  // If accessing a protected route without a token, redirect to home
   if (isProtectedRoute && !accessToken) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // If accessing auth routes with a token, redirect to home
@@ -47,5 +45,3 @@ export const config = {
     "/((?!api|_next/static|_next/image|favicon.ico|public).*)",
   ],
 };
-
-

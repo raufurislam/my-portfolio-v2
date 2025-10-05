@@ -23,21 +23,10 @@ export default function DashboardPage() {
 
   // Check if user is super admin
   if (!isSuperAdmin) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-red-600 mb-4">
-            Access Denied
-          </h1>
-          <p className="text-gray-600">
-            Only super admin can access this page.
-          </p>
-          <Button onClick={logout} className="mt-4">
-            Go Home
-          </Button>
-        </div>
-      </div>
-    );
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+    return null;
   }
 
   return (
