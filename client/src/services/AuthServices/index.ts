@@ -1,3 +1,4 @@
+// services\AuthServices
 import {
   ILoginCredentials,
   ILoginResponse,
@@ -33,7 +34,9 @@ class AuthService {
     return this.handleResponse<ILoginResponse>(response);
   }
 
-  async register(credentials: IRegisterCredentials): Promise<IRegisterResponse> {
+  async register(
+    credentials: IRegisterCredentials
+  ): Promise<IRegisterResponse> {
     const response = await fetch(`${API_BASE_URL}/user/register`, {
       method: "POST",
       credentials: "include",
@@ -60,9 +63,9 @@ class AuthService {
 
   async refreshAccessToken(): Promise<IAuthTokens> {
     const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
-    method: "POST",
-    credentials: "include",
-  });
+      method: "POST",
+      credentials: "include",
+    });
 
     return this.handleResponse<IApiResponse<IAuthTokens>>(response).then(
       (res) => res.data

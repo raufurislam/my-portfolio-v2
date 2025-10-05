@@ -35,15 +35,16 @@ import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 
 // Example roles (replace with your constants)
-const role = {
-  superAdmin: "SUPER_ADMIN",
-  user: "USER",
-};
+// const role = {
+//   superAdmin: "SUPER_ADMIN",
+//   user: "USER",
+// };
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/blogs", label: "Blogs", role: "PUBLIC" },
   { href: "/projects", label: "Projects", role: "PUBLIC" },
+  // { href: "/dashboard", label: "Dashboard", role: "PUBLIC" },
   { href: "/dashboard", label: "Dashboard", role: "SUPER_ADMIN" },
 ];
 

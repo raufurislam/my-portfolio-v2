@@ -135,12 +135,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const refreshToken = async () => {
+  const refreshToken = async (): Promise<void> => {
     try {
       const tokens = await authService.refreshAccessToken();
       // Tokens are automatically stored in cookies by the server
-      // We might need to update user data if the refresh token response includes it
-      return tokens;
+      // Optionally update user data if the refresh token response includes it
+      if (tokens && (tokens as any).user) {
+        setUser((tokens as any).user);
+      }
+      // Do not return tokens to match the IAuthContext signature (Promise<void>)
     } catch (error) {
       console.error("Token refresh failed:", error);
       // If refresh fails, user needs to login again
