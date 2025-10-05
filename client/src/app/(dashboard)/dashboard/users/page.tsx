@@ -1,148 +1,74 @@
-"use client";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+// import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ArrowUpDown,
-  ChevronLeft,
-  ChevronRight,
   RefreshCw,
   Search,
+  ArrowUpDown,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
-import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
 import { getAllUsers } from "@/actions/user";
+import CustomPagination from "@/components/shared/CustomPagination";
+import UrlSearchInput from "@/components/shared/UrlSearchInput";
+import UrlPerPageSelect from "@/components/shared/UrlPerPageSelect";
 
-export default async function ManageUsers() {
-  const res = await getAllUsers();
-    const users = res?.data;
-  console.log(res);
+type SearchParams = {
+  searchTerm?: string;
+  role?: string;
+  isActive?: string;
+  page?: string;
+  limit?: string;
+};
 
- /*
-  [
-    {
-        "_id": "68e21251aec0bce97e1a3fb4",
-        "name": "Hillary Estes",
-        "email": "jely@mailinator.com",
-        "password": "$2b$10$5jsornj92IWpE7eiKz/5rO/TwTDdSzWInZ0bM6.VQnuj45CfbEgFW",
-        "role": "USER",
-        "auths": [
-            {
-                "provider": "credentials",
-                "providerId": "jely@mailinator.com"
-            }
-        ],
-        "createdAt": "2025-10-05T06:38:09.743Z",
-        "updatedAt": "2025-10-05T06:38:09.743Z"
-    },
-    {
-        "_id": "68e13c978618e04175d0ab52",
-        "name": "Ulla Graves",
-        "email": "lenuh@mailinator.com",
-        "password": "$2b$10$pPEwTEWPYMMLiZt5KiWOMOgDHhVsIgXqW8HXsToS4peHPM//xTcfC",
-        "role": "USER",
-        "auths": [
-            {
-                "provider": "credentials",
-                "providerId": "lenuh@mailinator.com"
-            }
-        ],
-        "createdAt": "2025-10-04T15:26:15.974Z",
-        "updatedAt": "2025-10-04T15:26:15.974Z"
-    },
-    {
-        "_id": "68d95a0f841507db5021961f",
-        "name": "raufur islam",
-        "email": "raufurislam@gmail.com",
-        "role": "USER",
-        "avatar": "https://lh3.googleusercontent.com/a/ACg8ocIH8E6QTagoPt5JNg-1G23BdRd_vhGzSzB1CCID3mZk_x5Bx1ew=s96-c",
-        "auths": [
-            {
-                "provider": "google",
-                "providerId": "108037396370050215156"
-            },
-            {
-                "provider": "credentials",
-                "providerId": "raufurislam@gmail.com"
-            }
-        ],
-        "createdAt": "2025-09-28T15:53:51.402Z",
-        "updatedAt": "2025-09-28T16:05:43.329Z",
-        "password": "$2b$10$MaymIzcDsqYEv0JdUz0GlO0MpvYq0.iPJVXJdGhEx9.SPhKE17X4W"
-    },
-    {
-        "_id": "68d9598fc448dc0160680d64",
-        "name": "Super admin",
-        "email": "super@gmail.com",
-        "password": "$2b$10$9j2LD3UAhJzvA0KC3.dD7.o9bk0vxIMFN43bK2/PDnvqZeRvm7n6q",
-        "role": "SUPER_ADMIN",
-        "auths": [
-            {
-                "provider": "credentials",
-                "providerId": "super@gmail.com"
-            }
-        ],
-        "createdAt": "2025-09-28T15:51:43.919Z",
-        "updatedAt": "2025-09-28T15:51:43.919Z"
-    }
-]
-  */ 
+export default async function ManageUsers({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const page = Number(searchParams?.page || 1);
+  const limit = Number(searchParams?.limit || 10);
+  const role = (searchParams?.role as string) || "all";
+  const isActive = (searchParams?.isActive as string) || "all";
+  const sort = (searchParams as any)?.sort as string | undefined;
+  const searchTerm = (searchParams?.searchTerm as string) || "";
 
-  // --- DEMO DATA ---
-  const demoUsers = [
-    {
-      _id: "1",
-      name: "Raufur Islam",
-      email: "raufurislam@gmail.com",
-      role: "USER",
-      isActive: "ACTIVE",
-      avatar:
-        "https://lh3.googleusercontent.com/a/ACg8ocIH8E6QTagoPt5JNg-1G23BdRd_vh",
-      auths: [{ provider: "google" }, { provider: "credentials" }],
-      createdAt: "2025-09-28T15:53:51.402Z",
-    },
-    {
-      _id: "2",
-      name: "Ulla Graves",
-      email: "ulla@mailinator.com",
-      role: "ADMIN",
-      isActive: "INACTIVE",
-      avatar: "https://api.dicebear.com/9.x/initials/svg?seed=Ulla%20Graves",
-      auths: [{ provider: "credentials" }],
-      createdAt: "2025-09-25T08:30:00Z",
-    },
-  ];
-
-  // --- FILTER STATE ---
-  const [filters, setFilters] = useState({
-    search: "",
-    role: "all",
-    isActive: "all",
-    page: 1,
-    limit: 10,
+  const res = await getAllUsers({
+    page,
+    limit,
+    role,
+    isActive,
+    searchTerm,
+    sort,
   });
+  const users = res?.data || [];
+  const meta = res?.meta || { page, limit, totalPage: 1, total: users.length };
 
-  const clearFilters = () => {
-    setFilters({
-      search: "",
-      role: "all",
-      isActive: "all",
-      page: 1,
-      limit: 10,
-    });
-  };
+  // Build safe refresh href from known primitives
+  const refreshParams = new URLSearchParams();
+  if (searchTerm) refreshParams.set("searchTerm", searchTerm);
+  if (role) refreshParams.set("role", role);
+  if (isActive) refreshParams.set("isActive", isActive);
+  refreshParams.set("page", String(page));
+  refreshParams.set("limit", String(limit));
+  const refreshHref = `?${refreshParams.toString()}`;
 
-  const handlePageChange = (nextPage: number) =>
-    setFilters((f) => ({ ...f, page: nextPage }));
+  // Created sort helpers
+  const currentSort = sort || "";
+  const sortDir =
+    currentSort === "createdAt"
+      ? "asc"
+      : currentSort === "-createdAt"
+      ? "desc"
+      : undefined;
+  const sortParams = new URLSearchParams();
+  if (searchTerm) sortParams.set("searchTerm", searchTerm);
+  sortParams.set("limit", String(limit));
+  sortParams.set("page", String(page));
+  sortParams.set("sort", sortDir === "desc" ? "createdAt" : "-createdAt");
+  const createdSortHref = `?${sortParams.toString()}`;
 
   return (
     <div>
@@ -155,12 +81,14 @@ export default async function ManageUsers() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="flex items-center gap-2">
-            <RefreshCw className="h-4 w-4" /> Refresh
-          </Button>
-          <Button variant="outline" onClick={clearFilters}>
-            Clear Filters
-          </Button>
+          <Link href={refreshHref}>
+            <Button variant="outline" className="flex items-center gap-2">
+              <RefreshCw className="h-4 w-4" /> Refresh
+            </Button>
+          </Link>
+          <Link href="?">
+            <Button variant="outline">Clear Filters</Button>
+          </Link>
         </div>
       </div>
 
@@ -173,61 +101,23 @@ export default async function ManageUsers() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {/* Search */}
+            {/* Search (debounced, URL-driven) */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Search</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
+                <UrlSearchInput
                   placeholder="Search by name or email..."
-                  value={filters.search}
-                  onChange={(e) =>
-                    setFilters((f) => ({ ...f, search: e.target.value }))
-                  }
+                  defaultValue={searchTerm}
                   className="pl-10"
                 />
               </div>
             </div>
 
-            {/* Role */}
+            {/* Per page */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Role</label>
-              <Select
-                value={filters.role}
-                onValueChange={(value) =>
-                  setFilters((f) => ({ ...f, role: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All Roles" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Roles</SelectItem>
-                  <SelectItem value="USER">User</SelectItem>
-                  <SelectItem value="ADMIN">Admin</SelectItem>
-                  <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Status */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Status</label>
-              <Select
-                value={filters.isActive}
-                onValueChange={(value) =>
-                  setFilters((f) => ({ ...f, isActive: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="All Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="ACTIVE">Active</SelectItem>
-                  <SelectItem value="INACTIVE">Inactive</SelectItem>
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium">Per page</label>
+              <UrlPerPageSelect defaultLimit={limit} />
             </div>
           </div>
         </CardContent>
@@ -244,31 +134,53 @@ export default async function ManageUsers() {
                   <th className="px-4 py-3">Email</th>
                   <th className="px-4 py-3">Role</th>
                   <th className="px-4 py-3">Providers</th>
-                  <th className="px-4 py-3">Created</th>
+                  <th className="px-4 py-3">
+                    <Link
+                      href={createdSortHref}
+                      className="inline-flex items-center gap-1"
+                    >
+                      Created
+                      {sortDir === "asc" ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : sortDir === "desc" ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ArrowUpDown className="h-4 w-4" />
+                      )}
+                    </Link>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {demoUsers.map((user) => (
+                {users.map((user: any) => (
                   <tr
                     key={user._id}
                     className="border-b hover:bg-muted/40 transition-colors"
                   >
                     <td className="px-4 py-3 flex items-center gap-3">
-                      <Image
-                        src={user.avatar}
-                        alt={user.name}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                      />
-                      <span className="font-medium">{user.name}</span>
+                      {user.avatar ? (
+                        <Image
+                          src={user.avatar}
+                          alt={user.name || user.email}
+                          width={32}
+                          height={32}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold uppercase">
+                          {(user.name || user.email || "U").slice(0, 1)}
+                        </div>
+                      )}
+                      <span className="font-medium">
+                        {user.name || "Unnamed"}
+                      </span>
                     </td>
                     <td className="px-4 py-3 text-sm text-muted-foreground">
                       {user.email}
                     </td>
                     <td className="px-4 py-3 text-sm">{user.role}</td>
                     <td className="px-4 py-3 text-sm space-x-1">
-                      {user.auths.map((a) => (
+                      {(user.auths || []).map((a: any) => (
                         <span
                           key={a.provider}
                           className="inline-block px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs capitalize"
@@ -294,11 +206,9 @@ export default async function ManageUsers() {
       </Card>
 
       {/* Pagination */}
-        {/* Pagination */}
       <CustomPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
+        currentPage={meta.page}
+        totalPages={meta.totalPage || 1}
       />
     </div>
   );

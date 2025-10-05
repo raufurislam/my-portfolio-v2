@@ -111,6 +111,8 @@
 
 // export default CustomPagination;
 
+"use client";
+
 import {
   Pagination,
   PaginationContent,
@@ -120,11 +122,13 @@ import {
   PaginationNext,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 type CustomPaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  onPageChange?: (page: number) => void;
 };
 
 const CustomPagination = ({
@@ -132,13 +136,27 @@ const CustomPagination = ({
   totalPages,
   onPageChange,
 }: CustomPaginationProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   if (totalPages <= 1) return null;
 
-  const handlePageClick = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page);
-    }
-  };
+  const handlePageClick = useCallback(
+    (page: number) => {
+      if (!(page >= 1 && page <= totalPages)) return;
+      // Prefer callback if provided
+      if (onPageChange) {
+        onPageChange(page);
+        return;
+      }
+      // Otherwise update URL's page param preserving others
+      const params = new URLSearchParams(searchParams?.toString());
+      params.set("page", String(page));
+      const query = params.toString();
+      router.push(`?${query}`);
+    },
+    [onPageChange, router, searchParams, totalPages]
+  );
 
   // Generate page numbers with ellipsis
   const renderPageNumbers = () => {

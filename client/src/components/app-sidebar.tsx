@@ -42,6 +42,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           items: [{ title: "Dashboard", url: "/dashboard" }],
         },
         {
+          title: "Add New",
+          items: [
+            { title: "Add Projects", url: "/dashboard/projects/add-project" },
+            { title: "Add Blogs", url: "/dashboard/blogs/add-blog" },
+          ],
+        },
+        {
           title: "Management",
           items: [
             { title: "Manage Projects", url: "/dashboard/projects" },
