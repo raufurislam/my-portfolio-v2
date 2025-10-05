@@ -47,7 +47,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             { title: "Manage Projects", url: "/dashboard/projects" },
             { title: "Manage Blogs", url: "/dashboard/blogs" },
             { title: "Manage Users", url: "/dashboard/users" },
-            // { title: "Blogs", url: "/dashboard/blogs" },
           ],
         },
       ]
