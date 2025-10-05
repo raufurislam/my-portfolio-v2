@@ -44,9 +44,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         {
           title: "Management",
           items: [
-            { title: "Manage Projects", url: "/projects" },
-            { title: "Manage Blogs", url: "/blogs" },
-            { title: "Manage Users", url: "/users" },
+            { title: "Manage Projects", url: "/dashboard/projects" },
+            { title: "Manage Blogs", url: "/dashboard/blogs" },
+            { title: "Manage Users", url: "/dashboard/users" },
             // { title: "Blogs", url: "/dashboard/blogs" },
           ],
         },
