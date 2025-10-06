@@ -1,16 +1,28 @@
 "use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Calendar, Eye, Star } from "lucide-react";
+import { ExternalLink, Github, Calendar, Eye, Star, Edit, Trash2, MoreVertical } from "lucide-react";
 import { IProject } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import EditProjectModal from "./EditProjectModal";
+import DeleteProjectDialog from "./DeleteProjectDialog";
 
 interface ProjectCardProps {
   project: IProject;
+  onProjectUpdate?: () => void;
 }
 
-export default function ProjectCardManage({ project }: ProjectCardProps) {
+export default function ProjectCardManage({ project, onProjectUpdate }: ProjectCardProps) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -110,8 +122,8 @@ export default function ProjectCardManage({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        {/* View Details Button */}
-        <div className="mt-4">
+        {/* Actions */}
+        <div className="mt-4 flex items-center justify-between">
           <Link
             href={`/projects/${project.slug}`}
             className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200"
@@ -119,10 +131,50 @@ export default function ProjectCardManage({ project }: ProjectCardProps) {
             View Details
             <ExternalLink className="w-4 h-4" />
           </Link>
-          <Button>Edit Project</Button>
-          <Button>Delete Project</Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
+                <Edit className="w-4 h-4 mr-2" />
+                Edit Project
+              </DropdownMenuItem>
+              <DropdownMenuItem 
+                onClick={() => setIsDeleteDialogOpen(true)}
+                className="text-red-600 focus:text-red-600"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Project
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
+
+      {/* Modals */}
+      <EditProjectModal
+        project={project}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={() => {
+          onProjectUpdate?.();
+          setIsEditModalOpen(false);
+        }}
+      />
+
+      <DeleteProjectDialog
+        project={project}
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onSuccess={() => {
+          onProjectUpdate?.();
+          setIsDeleteDialogOpen(false);
+        }}
+      />
     </motion.div>
   );
 }
