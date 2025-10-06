@@ -1,3 +1,4 @@
+import ProjectCardManage from "@/components/modules/projects/ProjectCardManage";
 import { getAllProjects } from "@/services/ProjectServices";
 
 export default async function ManageProjects() {
@@ -6,7 +7,7 @@ export default async function ManageProjects() {
 
   return (
     <div>
-      <h1>This is the Manage Projects page</h1>
+      <ProjectCardManage project={projects} />
     </div>
   );
 }
