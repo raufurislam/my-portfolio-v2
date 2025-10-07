@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Calendar, Eye, User } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 
 interface BlogDetailsProps {
   blog: {
@@ -23,6 +24,32 @@ interface BlogDetailsProps {
 
 export default function BlogDetails({ blog }: BlogDetailsProps) {
   const [displayViews, setDisplayViews] = useState<number>(blog.views ?? 0);
+
+  // Sanitize HTML content for security
+  const sanitizedContent = DOMPurify.sanitize(blog.content, {
+    ALLOWED_TAGS: [
+      "p",
+      "br",
+      "strong",
+      "em",
+      "u",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "ul",
+      "ol",
+      "li",
+      "a",
+      "img",
+      "blockquote",
+      "pre",
+      "code",
+    ],
+    ALLOWED_ATTR: ["href", "src", "alt", "title", "class", "style"],
+  });
 
   useEffect(() => {
     if (!blog?._id) return;
@@ -105,9 +132,10 @@ export default function BlogDetails({ blog }: BlogDetailsProps) {
       {/* Content and aside */}
       <div className="mt-10 grid grid-cols-1 lg:grid-cols-4 gap-10">
         <div className="lg:col-span-3">
-          <div className="prose prose-lg max-w-none dark:prose-invert">
-            {blog.content}
-          </div>
+          <div
+            className="prose prose-lg max-w-none dark:prose-invert [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:mb-2 [&_img]:max-w-full [&_img]:h-auto [&_img]:rounded-lg"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
         </div>
 
         {/* Aside */}

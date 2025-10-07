@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import QuillEditor from "@/components/ui/quill-editor";
 import {
   Card,
   CardContent,
@@ -34,7 +34,7 @@ import Link from "next/link";
 
 const createBlogSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
-  content: z.string().min(10, "Content must be at least 10 characters"),
+  content: z.string().min(1, "Content is required"),
   thumbnail: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   tags: z.array(z.string().min(1, "Tag cannot be empty")),
   isFeatured: z.boolean(),
@@ -206,18 +206,16 @@ export default function AddBlog() {
                 <CardHeader>
                   <CardTitle>Blog Content</CardTitle>
                   <CardDescription>
-                    Write your blog post content using markdown or HTML
+                    Write your blog post content using the rich text editor
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <Label htmlFor="content">Content *</Label>
-                    <Textarea
-                      id="content"
-                      {...register("content")}
+                    <QuillEditor
+                      value={watchedData.content || ""}
+                      onChange={(value) => setValue("content", value)}
                       placeholder="Write your blog content here..."
-                      rows={20}
-                      className="font-mono text-sm"
                     />
                     {errors.content && (
                       <p className="text-sm text-red-500">
@@ -227,43 +225,20 @@ export default function AddBlog() {
                   </div>
 
                   <div className="mt-4 p-4 bg-muted rounded-lg">
-                    <h4 className="font-medium text-sm mb-2">Content Tips:</h4>
+                    <h4 className="font-medium text-sm mb-2">
+                      Editor Features:
+                    </h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>
-                        • Use{" "}
-                        <code className="bg-background px-1 rounded">
-                          **bold**
-                        </code>{" "}
-                        for bold text
+                        • <strong>Bold</strong>, <em>italic</em>, and{" "}
+                        <u>underline</u> text formatting
                       </li>
-                      <li>
-                        • Use{" "}
-                        <code className="bg-background px-1 rounded">
-                          *italic*
-                        </code>{" "}
-                        for italic text
-                      </li>
-                      <li>
-                        • Use{" "}
-                        <code className="bg-background px-1 rounded">
-                          # Heading
-                        </code>{" "}
-                        for headings
-                      </li>
-                      <li>
-                        • Use{" "}
-                        <code className="bg-background px-1 rounded">
-                          [link text](url)
-                        </code>{" "}
-                        for links
-                      </li>
-                      <li>
-                        • Use{" "}
-                        <code className="bg-background px-1 rounded">
-                          ![alt text](image-url)
-                        </code>{" "}
-                        for images
-                      </li>
+                      <li>• Headings (H1, H2, H3) for structure</li>
+                      <li>• Bullet and numbered lists</li>
+                      <li>• Insert links and images by URL</li>
+                      <li>• Text alignment (left, center, right)</li>
+                      <li>• Blockquotes and code blocks</li>
+                      <li>• Clear formatting option</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -405,24 +380,7 @@ export default function AddBlog() {
                           <div
                             className="prose prose-sm max-w-none"
                             dangerouslySetInnerHTML={{
-                              __html: watchedData.content
-                                .replace(
-                                  /\*\*(.*?)\*\*/g,
-                                  "<strong>$1</strong>"
-                                )
-                                .replace(/\*(.*?)\*/g, "<em>$1</em>")
-                                .replace(/^# (.*$)/gm, "<h1>$1</h1>")
-                                .replace(/^## (.*$)/gm, "<h2>$1</h2>")
-                                .replace(/^### (.*$)/gm, "<h3>$1</h3>")
-                                .replace(
-                                  /\[([^\]]+)\]\(([^)]+)\)/g,
-                                  '<a href="$2">$1</a>'
-                                )
-                                .replace(
-                                  /!\[([^\]]*)\]\(([^)]+)\)/g,
-                                  '<img src="$2" alt="$1" />'
-                                )
-                                .replace(/\n/g, "<br />"),
+                              __html: watchedData.content,
                             }}
                           />
                         ) : (

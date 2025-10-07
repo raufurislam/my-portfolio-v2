@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Eye } from "lucide-react";
+import DOMPurify from "dompurify";
 
 export interface BlogCardProps {
   post: {
@@ -22,6 +23,9 @@ export interface BlogCardProps {
 }
 
 export default function BlogCard({ post }: BlogCardProps) {
+  // Strip HTML tags for preview text
+  const previewText = DOMPurify.sanitize(post.content, { ALLOWED_TAGS: [] }).substring(0, 150);
+  
   return (
     <div className="group rounded-2xl border bg-card shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
       {/* Thumbnail */}
@@ -58,7 +62,7 @@ export default function BlogCard({ post }: BlogCardProps) {
         </Link>
 
         <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
-          {post.content}
+          {previewText}...
         </p>
 
         <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
