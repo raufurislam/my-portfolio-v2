@@ -57,7 +57,7 @@ export default function BlogCardManage({ blog, onBlogUpdate }: BlogCardProps) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group rounded-2xl border bg-card shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+      className="group rounded-2xl border bg-card shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full"
     >
       {/* Thumbnail */}
       <Link href={`/blogs/${blog.slug}`} className="relative block w-full">
@@ -103,63 +103,65 @@ export default function BlogCardManage({ blog, onBlogUpdate }: BlogCardProps) {
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
         <Link href={`/blogs/${blog.slug}`}>
-          <h3 className="text-lg md:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2">
+          <h3 className="text-lg md:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
             {blog.title}
           </h3>
         </Link>
 
-        <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
+        <p className="mt-2 text-sm text-muted-foreground line-clamp-2 min-h-[2.5rem]">
           {previewText}...
         </p>
 
-        <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex h-6 items-center rounded-full bg-muted px-2 font-medium text-foreground">
-              <User className="w-3 h-3 mr-1" />
-              {blog.author.name}
-            </span>
+        <div className="mt-auto">
+          <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex h-6 items-center rounded-full bg-muted px-2 font-medium text-foreground">
+                <User className="w-3 h-3 mr-1" />
+                {blog.author.name}
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                {new Date(blog.createdAt).toLocaleDateString()}
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="h-4 w-4" /> {blog.views}
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <Calendar className="h-4 w-4" />
-              {new Date(blog.createdAt).toLocaleDateString()}
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="h-4 w-4" /> {blog.views}
-            </span>
+
+          {/* Actions */}
+          <div className="mt-4 flex items-center justify-between">
+            <Link
+              href={`/blogs/${blog.slug}`}
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200"
+            >
+              View Details
+              <ExternalLink className="w-4 h-4" />
+            </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Blog
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setIsDeleteDialogOpen(true)}
+                  className="text-red-600 focus:text-red-600"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete Blog
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        </div>
-
-        {/* Actions */}
-        <div className="mt-4 flex items-center justify-between">
-          <Link
-            href={`/blogs/${blog.slug}`}
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-medium text-sm transition-colors duration-200"
-          >
-            View Details
-            <ExternalLink className="w-4 h-4" />
-          </Link>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                <MoreVertical className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setIsEditModalOpen(true)}>
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Blog
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setIsDeleteDialogOpen(true)}
-                className="text-red-600 focus:text-red-600"
-              >
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete Blog
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Tooltip,
   TooltipContent,
@@ -51,7 +51,7 @@ const navigationLinks = [
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const { user, logout, isAuthenticated, isLoading, isSuperAdmin } = useAuth();
+  const { user, logout, isAuthenticated, isSuperAdmin } = useAuth();
 
   const handleLogout = async () => {
     try {

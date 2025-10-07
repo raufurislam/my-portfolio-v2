@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_API;
 
 export const getAllProjects = async (options?: RequestInit) => {

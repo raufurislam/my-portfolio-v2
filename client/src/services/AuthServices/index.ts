@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // services\AuthServices
 import {
   ILoginCredentials,

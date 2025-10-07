@@ -37,7 +37,7 @@ export async function generateMetadata({
         images: project.thumbnail ? [project.thumbnail] : [],
       },
     };
-  } catch (error) {
+  } catch {
     return {
       title: "Project Not Found",
       description: "The requested project could not be found.",
@@ -61,7 +61,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     const { data: project } = await res.json();
 
     return <ProjectDetails project={project} />;
-  } catch (error) {
+  } catch {
     notFound();
   }
 }

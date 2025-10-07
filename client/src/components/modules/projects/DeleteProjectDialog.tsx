@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -69,7 +68,7 @@ export default function DeleteProjectDialog({
           <p className="text-sm text-muted-foreground">
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              "{project?.title}"
+              &quot;{project?.title}&quot;
             </span>
             ? This will permanently remove the project and all its data.
           </p>

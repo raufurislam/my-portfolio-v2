@@ -139,8 +139,6 @@ const CustomPagination = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  if (totalPages <= 1) return null;
-
   const handlePageClick = useCallback(
     (page: number) => {
       if (!(page >= 1 && page <= totalPages)) return;
@@ -157,6 +155,8 @@ const CustomPagination = ({
     },
     [onPageChange, router, searchParams, totalPages]
   );
+
+  if (totalPages <= 1) return null;
 
   // Generate page numbers with ellipsis
   const renderPageNumbers = () => {

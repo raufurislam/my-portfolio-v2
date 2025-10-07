@@ -21,6 +21,7 @@ import { X, Plus, Eye, EyeOff } from "lucide-react";
 import QuillEditor from "@/components/ui/quill-editor";
 import { updateBlog } from "@/services/BlogServices";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const updateBlogSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -93,6 +94,19 @@ export default function EditBlogModal({
       });
     }
   }, [isOpen, blog, reset]);
+
+  // Force content update when modal opens
+  useEffect(() => {
+    if (isOpen && blog) {
+      console.log("EditBlogModal: Setting content:", blog.content);
+      setValue("content", blog.content);
+      // Force a small delay to ensure the editor is ready
+      setTimeout(() => {
+        console.log("EditBlogModal: Setting content again:", blog.content);
+        setValue("content", blog.content);
+      }, 200);
+    }
+  }, [isOpen, blog, setValue]);
 
   const addTag = () => {
     if (newTag.trim() && !watchedTags.includes(newTag.trim())) {
@@ -261,9 +275,11 @@ export default function EditBlogModal({
                       </h3>
                       {watchedData.thumbnail && (
                         <div className="relative h-32 w-full rounded-lg overflow-hidden">
-                          <img
+                          <Image
                             src={watchedData.thumbnail}
                             alt="Thumbnail preview"
+                            width={400}
+                            height={128}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -304,6 +320,7 @@ export default function EditBlogModal({
               <div className="space-y-2">
                 <Label htmlFor="content">Content *</Label>
                 <QuillEditor
+                  key={blog._id}
                   value={watchedData.content || ""}
                   onChange={(value) => setValue("content", value)}
                   placeholder="Write your blog content here..."

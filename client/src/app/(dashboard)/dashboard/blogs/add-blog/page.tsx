@@ -31,6 +31,7 @@ import {
   Tag,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const createBlogSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -113,9 +114,13 @@ export default function AddBlog() {
       await createBlog(cleanedData);
       toast.success("Blog created successfully!");
       router.push("/dashboard/blogs");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating blog:", error);
-      toast.error(error.message || "Failed to create blog. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to create blog. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -363,7 +368,7 @@ export default function AddBlog() {
                   <div className="space-y-4">
                     {watchedData.thumbnail && (
                       <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                        <img
+                        <Image
                           src={watchedData.thumbnail}
                           alt="Blog thumbnail"
                           className="w-full h-full object-cover"

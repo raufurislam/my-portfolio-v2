@@ -23,7 +23,7 @@ export default function Hero() {
               Full-Stack Developer
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6">
-              Hi, I'm <span className="text-primary">Your Name</span>
+              Hi, I&apos;m <span className="text-primary">Your Name</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">
               I build exceptional digital experiences with modern technologies.

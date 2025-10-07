@@ -13,7 +13,7 @@ export default function NotFound() {
           Project Not Found
         </h1>
         <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-          The project you're looking for doesn't exist or has been moved.
+          The project you&apos;re looking for doesn&apos;t exist or has been moved.
         </p>
         <Link href="/projects">
           <Button className="gap-2">

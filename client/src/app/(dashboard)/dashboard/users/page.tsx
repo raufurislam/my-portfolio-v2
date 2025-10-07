@@ -32,7 +32,7 @@ export default async function ManageUsers({
   const limit = Number(searchParams?.limit || 10);
   const role = (searchParams?.role as string) || "all";
   const isActive = (searchParams?.isActive as string) || "all";
-  const sort = (searchParams as any)?.sort as string | undefined;
+  const sort = (searchParams as Record<string, string | string[] | undefined>)?.sort as string | undefined;
   const searchTerm = (searchParams?.searchTerm as string) || "";
 
   const res = await getAllUsers({
@@ -152,7 +152,7 @@ export default async function ManageUsers({
                 </tr>
               </thead>
               <tbody>
-                {users.map((user: any) => (
+                {users.map((user: { _id: string; name?: string; email: string; avatar?: string; role: string; auths?: Array<{ provider: string }>; createdAt: string }) => (
                   <tr
                     key={user._id}
                     className="border-b hover:bg-muted/40 transition-colors"
@@ -180,7 +180,7 @@ export default async function ManageUsers({
                     </td>
                     <td className="px-4 py-3 text-sm">{user.role}</td>
                     <td className="px-4 py-3 text-sm space-x-1">
-                      {(user.auths || []).map((a: any) => (
+                      {(user.auths || []).map((a: { provider: string }) => (
                         <span
                           key={a.provider}
                           className="inline-block px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs capitalize"

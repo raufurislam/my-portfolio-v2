@@ -29,8 +29,9 @@ export function useAuthenticatedFetch() {
             ...options.headers,
           },
         });
-      } catch (error) {
+      } catch (error: unknown) {
         // If refresh fails, logout the user
+        console.log("Token refresh failed, logging out user:", error);
         await logout();
         throw new Error("Session expired. Please login again.");
       }
@@ -41,5 +42,3 @@ export function useAuthenticatedFetch() {
 
   return { authenticatedFetch };
 }
-
-

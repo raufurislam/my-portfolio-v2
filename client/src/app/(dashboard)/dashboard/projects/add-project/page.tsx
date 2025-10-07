@@ -22,6 +22,7 @@ import { createProject } from "@/services/ProjectServices";
 import { toast } from "sonner";
 import { Loader2, Plus, X, ArrowLeft, Save, Eye } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const createProjectSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -63,23 +64,6 @@ export default function AddProject() {
   const [newScreenshot, setNewScreenshot] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
 
-  // Redirect if not authenticated
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    router.push("/login");
-    return null;
-  }
-
   const {
     register,
     handleSubmit,
@@ -108,6 +92,23 @@ export default function AddProject() {
   const watchedTechnologies = watch("technologies") || [];
   const watchedScreenshots = watch("screenshots") || [];
   const watchedData = watch();
+
+  // Redirect if not authenticated
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push("/login");
+    return null;
+  }
 
   const addTechnology = () => {
     if (
@@ -158,11 +159,10 @@ export default function AddProject() {
       await createProject(cleanedData);
       toast.success("Project created successfully!");
       router.push("/dashboard/projects");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error creating project:", error);
-      toast.error(
-        error.message || "Failed to create project. Please try again."
-      );
+      const errorMessage = error instanceof Error ? error.message : "Failed to create project. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -307,7 +307,7 @@ export default function AddProject() {
                 <CardHeader>
                   <CardTitle>GitHub Repositories</CardTitle>
                   <CardDescription>
-                    Link to your project's source code repositories
+                    Link to your project&apos;s source code repositories
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -516,9 +516,11 @@ export default function AddProject() {
                   <div className="space-y-4">
                     {watchedData.thumbnail && (
                       <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                        <img
+                        <Image
                           src={watchedData.thumbnail}
                           alt="Project thumbnail"
+                          width={400}
+                          height={225}
                           className="w-full h-full object-cover"
                         />
                       </div>

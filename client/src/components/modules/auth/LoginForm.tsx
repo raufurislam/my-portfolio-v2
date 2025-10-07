@@ -42,7 +42,7 @@ export default function LoginForm() {
   const onSubmit = async (values: LoginFormValues) => {
     try {
       await login(values as ILoginCredentials);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Error is already handled in the AuthContext
       console.error("Login error:", error);
     }
@@ -135,7 +135,7 @@ export default function LoginForm() {
           </Button>
         </div>
         <p className="text-center text-sm text-gray-500 mt-4">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/register" className="text-blue-500 hover:underline">
             Register
           </Link>

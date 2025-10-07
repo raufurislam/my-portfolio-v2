@@ -4,9 +4,10 @@ import ProjectCard from "@/components/modules/projects/ProjectCard";
 import { motion } from "framer-motion";
 import { Code2, Star, Filter } from "lucide-react";
 import { useEffect, useState } from "react";
+import { IProject } from "@/types";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<IProject[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function ProjectsPage() {
   }, []);
 
   const featuredProjects =
-    projects?.filter((project: any) => project.isFeatured) || [];
+    projects?.filter((project) => project.isFeatured) || [];
 
   if (loading) {
     return (
@@ -107,7 +108,7 @@ export default function ProjectsPage() {
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-              {featuredProjects.map((project: any, index: number) => (
+              {featuredProjects.map((project, index: number) => (
                 <motion.div
                   key={project._id}
                   initial={{ opacity: 0, y: 20 }}
@@ -153,7 +154,7 @@ export default function ProjectsPage() {
 
           {/* Projects Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects?.map((project: any, index: number) => (
+            {projects?.map((project, index: number) => (
               <motion.div
                 key={project._id}
                 initial={{ opacity: 0, y: 15 }}

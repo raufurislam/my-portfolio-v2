@@ -53,8 +53,9 @@ export default function RegisterForm() {
     try {
       // Send only the required fields to backend (no confirmPassword)
       const { confirmPassword, ...registrationData } = values;
+      void confirmPassword; // Explicitly mark as intentionally unused
       await register(registrationData as IRegisterCredentials);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Error is already handled in the AuthContext
       console.error("Registration error:", error);
     }

@@ -34,6 +34,7 @@ export default function QuillEditor({
 }: QuillEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     // Always set loaded to true immediately
@@ -43,12 +44,24 @@ export default function QuillEditor({
   useEffect(() => {
     // Update content when value changes
     if (editorRef.current && value !== undefined) {
-      // Only update if the content is actually different to avoid cursor issues
-      if (editorRef.current.innerHTML !== value) {
-        editorRef.current.innerHTML = value || "";
-      }
+      console.log("QuillEditor: Setting content:", value);
+      // Always update content when value changes
+      editorRef.current.innerHTML = value || "";
+      setIsInitialized(true);
     }
   }, [value]);
+
+  // Initialize content on mount with a small delay to ensure DOM is ready
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (editorRef.current && value && !isInitialized) {
+        editorRef.current.innerHTML = value;
+        setIsInitialized(true);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [value, isInitialized]);
 
   const execCommand = (command: string, value?: string) => {
     document.execCommand(command, false, value);
@@ -226,6 +239,7 @@ export default function QuillEditor({
           onClick={insertImage}
           title="Insert Image"
         >
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image className="w-4 h-4" />
         </Button>
 

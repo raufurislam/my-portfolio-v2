@@ -67,9 +67,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         throw new Error(response.message || "Login failed");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
-      toast.error(error.message || "Login failed. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please try again.";
+      toast.error(errorMessage);
       throw error;
     } finally {
       setIsLoading(false);
@@ -96,8 +100,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser(loginResponse.data.user);
             toast.success("Welcome! You are now logged in.");
           }
-        } catch (loginError: any) {
+        } catch (loginError: unknown) {
           // Registration successful but auto-login failed
+          console.log("Auto-login failed after registration:", loginError);
           toast.success("Registration successful! Please login manually.");
           router.push("/login");
           return;
@@ -108,9 +113,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       } else {
         throw new Error(registerResponse.message || "Registration failed");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Registration error:", error);
-      toast.error(error.message || "Registration failed. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Registration failed. Please try again.";
+      toast.error(errorMessage);
       throw error;
     } finally {
       setIsLoading(false);
@@ -124,7 +133,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
       toast.success("Logged out successfully");
       router.push("/");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Logout error:", error);
       // Even if logout fails on server, clear local state
       setUser(null);
@@ -140,8 +149,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const tokens = await authService.refreshAccessToken();
       // Tokens are automatically stored in cookies by the server
       // Optionally update user data if the refresh token response includes it
-      if (tokens && (tokens as any).user) {
-        setUser((tokens as any).user);
+      if (tokens && (tokens as unknown as Record<string, unknown>).user) {
+        setUser((tokens as unknown as Record<string, unknown>).user as IUser);
       }
       // Do not return tokens to match the IAuthContext signature (Promise<void>)
     } catch (error) {
