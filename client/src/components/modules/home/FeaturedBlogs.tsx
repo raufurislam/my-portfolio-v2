@@ -10,6 +10,14 @@ export default async function FeaturedBlogs() {
   const featured = (blogs ?? []).slice(0, 3);
   // const rest = (blogs ?? []).slice(3);
 
+  // Simple function to strip HTML tags for preview text
+  const stripHtmlTags = (html: string) => {
+    return html
+      .replace(/<[^>]*>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .trim();
+  };
+
   return (
     <section className="my-12">
       <div className="max-w-7xl mx-auto px-4">
@@ -53,7 +61,7 @@ export default async function FeaturedBlogs() {
                     {featured[0].title}
                   </h3>
                   <p className="mt-2 max-w-2xl text-sm md:text-base text-muted-foreground line-clamp-2">
-                    {featured[0].content}
+                    {stripHtmlTags(featured[0].content).substring(0, 120)}...
                   </p>
                 </div>
               </div>
