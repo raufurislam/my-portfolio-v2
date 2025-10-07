@@ -11,6 +11,16 @@ export const getAllBlogs = async (options?: RequestInit) => {
   return json.data;
 };
 
+export const getAllBlogsForManagement = async () => {
+  const res = await fetch(`${BASE_URL}/blog?limit=100`, {
+    cache: "no-store",
+    credentials: "include",
+  });
+  if (!res.ok) throw new Error("Failed to fetch blogs");
+  const json = await res.json();
+  return json.data;
+};
+
 export const getBlogById = async (id: string) => {
   const res = await fetch(`${BASE_URL}/blog/${id}`, {
     cache: "no-store",
