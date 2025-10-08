@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Code2, Github, Linkedin, Mail } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Hero() {
   return (
@@ -12,6 +13,26 @@ export default function Hero() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center">
+          {/* Profile Image */}
+          <div className="mb-8 flex justify-center">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-primary blur-md opacity-50 animate-pulse" />
+              <div className="relative w-32 h-38 rounded-full border-4 border-primary overflow-hidden bg-gray-900">
+                <div className="w-full h-full flex items-center justify-center text-6xl">
+                  <Image
+                    src="https://i.ibb.co.com/3xkRbQR/IMG-20240107-215349-956.jpg" // Replace with your profile image path
+                    alt="Profile Image"
+                    width={140}
+                    height={160}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              </div>
+              {/* Online indicator */}
+              <div className="absolute bottom-2 right-2 w-5 h-5 bg-primary rounded-full border-4 border-black" />
+            </div>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
