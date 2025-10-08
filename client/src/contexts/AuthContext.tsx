@@ -40,12 +40,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const initializeAuth = async () => {
     try {
       setIsLoading(true);
+      console.log("🔍 Initializing auth...");
+      console.log("🔍 API URL:", process.env.NEXT_PUBLIC_BASE_API);
+      console.log("🔍 Current cookies:", document.cookie);
+
       const userData = await authService.getCurrentUser();
+      console.log("🔍 getCurrentUser response:", userData);
+
       if (userData) {
         setUser(userData);
+        console.log("✅ User set in context:", userData);
+      } else {
+        console.log("❌ No user data received, clearing user state");
+        setUser(null);
       }
     } catch (error) {
-      console.error("Failed to initialize auth:", error);
+      console.error("❌ Failed to initialize auth:", error);
       // Clear any stale auth data
       setUser(null);
     } finally {
@@ -56,10 +66,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (credentials: ILoginCredentials) => {
     try {
       setIsLoading(true);
+      console.log("🔐 Starting login process...");
       const response = await authService.login(credentials);
+      console.log("🔐 Login response:", response);
 
       if (response.success && response.data.user) {
         setUser(response.data.user);
+        console.log("✅ Login successful, user set:", response.data.user);
+        console.log("🍪 Cookies after login:", document.cookie);
         toast.success(response.message || "Login successful!");
 
         // Redirect to home page
@@ -68,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error(response.message || "Login failed");
       }
     } catch (error: unknown) {
-      console.error("Login error:", error);
+      console.error("❌ Login error:", error);
       const errorMessage =
         error instanceof Error
           ? error.message
