@@ -21,6 +21,9 @@ const eslintConfig = [
     ],
   },
   {
+    plugins: {
+      react: reactPlugin,
+    },
     rules: {
       "react/no-unescaped-entities": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
