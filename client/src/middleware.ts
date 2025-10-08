@@ -1,34 +1,55 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getCurrentUser } from "@/lib/server-auth";
 
 // Define protected routes that require super admin access
 const protectedRoutes = ["/dashboard"];
 const authRoutes = ["/login", "/register"];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  console.log("🔒 Middleware processing:", pathname);
+
   // Check if the current route is protected (super admin only)
-  const isProtectedRoute = protectedRoutes.some((route) =>
+  const isProtected = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
 
   // Check if the current route is an auth route (login/register)
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isAuth = authRoutes.some((route) => pathname.startsWith(route));
 
-  // Get the access token from cookies
-  const accessToken = request.cookies.get("accessToken")?.value;
+  // Get user info from server-side cookies
+  const userInfo = await getCurrentUser();
 
-  // If accessing a protected route without a token, redirect to home
-  if (isProtectedRoute && !accessToken) {
+  console.log("🔒 Middleware check:", {
+    pathname,
+    isProtected,
+    isAuth,
+    isAuthenticated: !!userInfo,
+    isSuperAdmin: userInfo?.role === "SUPER_ADMIN",
+    userRole: userInfo?.role,
+  });
+
+  // If no user info and accessing protected route, redirect to home
+  if (isProtected && !userInfo) {
+    console.log("❌ No user info, redirecting to home");
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // If accessing auth routes with a token, redirect to home
-  if (isAuthRoute && accessToken) {
+  // If user exists but not super admin and accessing protected route, redirect to home
+  if (isProtected && userInfo && userInfo.role !== "SUPER_ADMIN") {
+    console.log("❌ Not super admin, redirecting to home");
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  // If user is authenticated and trying to access auth routes, redirect to home
+  if (isAuth && userInfo) {
+    console.log("✅ Already authenticated, redirecting to home");
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  console.log("✅ Access granted");
   return NextResponse.next();
 }
 

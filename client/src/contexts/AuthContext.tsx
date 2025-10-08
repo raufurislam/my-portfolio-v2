@@ -16,6 +16,7 @@ import {
   IAuthContext,
 } from "@/types";
 import { authService } from "@/services/AuthServices";
+import { authUtils } from "@/lib/auth-utils";
 
 const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
@@ -44,20 +45,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log("🔍 API URL:", process.env.NEXT_PUBLIC_BASE_API);
       console.log("🔍 Current cookies:", document.cookie);
 
+      // First, try to get user from localStorage (for production fallback)
+      const localUserData = authUtils.getUserData();
+      const localAccessToken = authUtils.getAccessToken();
+      
+      if (localUserData && localAccessToken && authUtils.isAuthenticated()) {
+        console.log("✅ Found valid user data in localStorage:", localUserData);
+        setUser(localUserData as IUser);
+        setIsLoading(false);
+        return;
+      }
+
+      // If no valid local data, try to get from server
       const userData = await authService.getCurrentUser();
       console.log("🔍 getCurrentUser response:", userData);
 
       if (userData) {
         setUser(userData);
-        console.log("✅ User set in context:", userData);
+        // Store in localStorage as backup
+        authUtils.setUserData(userData);
+        console.log("✅ User set in context and localStorage:", userData);
       } else {
         console.log("❌ No user data received, clearing user state");
         setUser(null);
+        authUtils.clearAuthData();
       }
     } catch (error) {
       console.error("❌ Failed to initialize auth:", error);
       // Clear any stale auth data
       setUser(null);
+      authUtils.clearAuthData();
     } finally {
       setIsLoading(false);
     }
@@ -72,8 +89,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (response.success && response.data.user) {
         setUser(response.data.user);
+        
+        // Store user data in localStorage as backup
+        authUtils.setUserData(response.data.user);
+        
+        // If tokens are provided, store them too
+        if (response.data.accessToken) {
+          authUtils.setAccessToken(response.data.accessToken);
+        }
+        if (response.data.refreshToken) {
+          authUtils.setRefreshToken(response.data.refreshToken);
+        }
+        
         console.log("✅ Login successful, user set:", response.data.user);
         console.log("🍪 Cookies after login:", document.cookie);
+        console.log("💾 Stored in localStorage:", authUtils.getUserData());
         toast.success(response.message || "Login successful!");
 
         // Redirect to home page
@@ -112,6 +142,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
           if (loginResponse.success && loginResponse.data.user) {
             setUser(loginResponse.data.user);
+            
+            // Store user data in localStorage as backup
+            authUtils.setUserData(loginResponse.data.user);
+            
+            // If tokens are provided, store them too
+            if (loginResponse.data.accessToken) {
+              authUtils.setAccessToken(loginResponse.data.accessToken);
+            }
+            if (loginResponse.data.refreshToken) {
+              authUtils.setRefreshToken(loginResponse.data.refreshToken);
+            }
+            
             toast.success("Welcome! You are now logged in.");
           }
         } catch (loginError: unknown) {
@@ -145,12 +187,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsLoading(true);
       await authService.logout();
       setUser(null);
+      // Clear localStorage data
+      authUtils.clearAuthData();
       toast.success("Logged out successfully");
       router.push("/");
     } catch (error: unknown) {
       console.error("Logout error:", error);
       // Even if logout fails on server, clear local state
       setUser(null);
+      authUtils.clearAuthData();
       toast.success("Logged out successfully");
       router.push("/");
     } finally {
@@ -162,15 +207,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const tokens = await authService.refreshAccessToken();
       // Tokens are automatically stored in cookies by the server
+      // Also store in localStorage as backup
+      if (tokens.accessToken) {
+        authUtils.setAccessToken(tokens.accessToken);
+      }
+      if (tokens.refreshToken) {
+        authUtils.setRefreshToken(tokens.refreshToken);
+      }
+      
       // Optionally update user data if the refresh token response includes it
       if (tokens && (tokens as unknown as Record<string, unknown>).user) {
-        setUser((tokens as unknown as Record<string, unknown>).user as IUser);
+        const userData = (tokens as unknown as Record<string, unknown>).user as IUser;
+        setUser(userData);
+        authUtils.setUserData(userData);
       }
       // Do not return tokens to match the IAuthContext signature (Promise<void>)
     } catch (error) {
       console.error("Token refresh failed:", error);
       // If refresh fails, user needs to login again
       setUser(null);
+      authUtils.clearAuthData();
       router.push("/login");
       throw error;
     }

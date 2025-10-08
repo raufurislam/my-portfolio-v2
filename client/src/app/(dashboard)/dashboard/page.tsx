@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 
 export default function DashboardPage() {
-  const { user, logout, isLoading, isSuperAdmin } = useAuth();
+  const { user, logout, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -21,13 +21,13 @@ export default function DashboardPage() {
     );
   }
 
-  // Check if user is super admin
-  if (!isSuperAdmin) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/";
-    }
-    return null;
-  }
+  // // Check if user is super admin
+  // if (!isSuperAdmin) {
+  //   if (typeof window !== "undefined") {
+  //     window.location.href = "/";
+  //   }
+  //   return null;
+  // }
 
   return (
     <div className="container mx-auto p-6">

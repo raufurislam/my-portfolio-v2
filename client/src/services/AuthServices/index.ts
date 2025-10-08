@@ -9,6 +9,7 @@ import {
   IApiResponse,
   IAuthTokens,
 } from "@/types";
+import { authUtils } from "@/lib/auth-utils";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_API;
 
@@ -75,16 +76,37 @@ class AuthService {
   }
 
   async getCurrentUser(): Promise<any> {
+    // First try to get from localStorage (for production fallback)
+    const localUserData = authUtils.getUserData();
+    const localAccessToken = authUtils.getAccessToken();
+
+    if (localUserData && localAccessToken && authUtils.isAuthenticated()) {
+      console.log("✅ Using cached user data from localStorage");
+      return localUserData;
+    }
+
+    // If no valid local data, try server
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       method: "GET",
       credentials: "include",
     });
 
     if (response.status === 401) {
+      // Clear any stale local data
+      authUtils.clearAuthData();
       return null; // User not authenticated
     }
 
-    return this.handleResponse<IApiResponse>(response).then((res) => res.data);
+    const userData = await this.handleResponse<IApiResponse>(response).then(
+      (res) => res.data
+    );
+
+    // Store user data in localStorage as backup
+    if (userData) {
+      authUtils.setUserData(userData);
+    }
+
+    return userData;
   }
 }
 
