@@ -1,0 +1,17 @@
+{
+  "/(auth)/login/page": "/login",
+  "/(auth)/register/page": "/register",
+  "/(dashboard)/dashboard/blogs/add-blog/page": "/dashboard/blogs/add-blog",
+  "/(dashboard)/dashboard/blogs/page": "/dashboard/blogs",
+  "/(dashboard)/dashboard/page": "/dashboard",
+  "/(dashboard)/dashboard/projects/add-project/page": "/dashboard/projects/add-project",
+  "/(dashboard)/dashboard/projects/page": "/dashboard/projects",
+  "/(dashboard)/dashboard/users/page": "/dashboard/users",
+  "/(public)/blogs/[slug]/page": "/blogs/[slug]",
+  "/(public)/blogs/page": "/blogs",
+  "/(public)/page": "/",
+  "/(public)/projects/[slug]/page": "/projects/[slug]",
+  "/(public)/projects/page": "/projects",
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico"
+}
