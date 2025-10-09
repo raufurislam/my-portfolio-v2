@@ -1,3 +1,0 @@
-module.exports=[83158,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(2579);a.n(d("[project]/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/client/app-dir/link.js <module evaluation>"))},78989,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(2579);a.n(d("[project]/node_modules/.pnpm/next@15.5.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/next/dist/client/app-dir/link.js"))},79479,a=>{"use strict";a.i(83158);var b=a.i(78989);a.n(b)}];
-
-//# sourceMappingURL=f7813_next_dist_client_app-dir_link_fe9bb47e.js.map

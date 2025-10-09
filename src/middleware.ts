@@ -8,7 +8,7 @@ type Role = keyof typeof roleBasedPrivateRoutes;
 const AuthRoutes = ["/login", "/register"];
 
 const roleBasedPrivateRoutes = {
-  SUPER_ADMIN: [/^\/dashboard/],
+  SUPER_ADMIN: [/^\/dashboard\/SUPER_ADMIN/],
 };
 
 export async function middleware(request: NextRequest) {
