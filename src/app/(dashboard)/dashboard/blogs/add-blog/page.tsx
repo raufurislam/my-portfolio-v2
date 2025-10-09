@@ -46,7 +46,8 @@ type CreateBlogFormData = z.infer<typeof createBlogSchema>;
 
 export default function AddBlog() {
   const router = useRouter();
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoading: authLoading } = useAuth();
+  // const { user, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [newTag, setNewTag] = useState("");
   const [previewMode, setPreviewMode] = useState(false);
@@ -83,6 +84,11 @@ export default function AddBlog() {
       </div>
     );
   }
+
+  // if (!user) {
+  //   router.push("/login");
+  //   return null;
+  // }
 
   const addTag = () => {
     if (newTag.trim() && !watchedTags.includes(newTag.trim())) {

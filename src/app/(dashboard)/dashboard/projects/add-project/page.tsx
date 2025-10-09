@@ -58,7 +58,8 @@ type CreateProjectFormData = z.infer<typeof createProjectSchema>;
 
 export default function AddProject() {
   const router = useRouter();
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoading: authLoading } = useAuth();
+  // const { user, isLoading: authLoading } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [newTechnology, setNewTechnology] = useState("");
   const [newScreenshot, setNewScreenshot] = useState("");
@@ -104,6 +105,11 @@ export default function AddProject() {
       </div>
     );
   }
+
+  // if (!user) {
+  //   router.push("/login");
+  //   return null;
+  // }
 
   const addTechnology = () => {
     if (

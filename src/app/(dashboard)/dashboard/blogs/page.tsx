@@ -8,7 +8,6 @@ import { RefreshCw, Plus } from "lucide-react";
 import BlogCardManage from "@/components/modules/blog/BlogCardManage";
 import { getAllBlogsForManagement } from "@/services/BlogServices";
 import { useAuth } from "@/hooks/useAuth";
-import { useRouter } from "next/navigation";
 
 interface IBlog {
   _id: string;
@@ -28,8 +27,9 @@ interface IBlog {
 }
 
 export default function ManageBlogs() {
-  const router = useRouter();
-  const { user, isLoading: authLoading } = useAuth();
+  // const router = useRouter();
+  const { isLoading: authLoading } = useAuth();
+  // const { user, isLoading: authLoading } = useAuth();
   const [blogs, setBlogs] = useState<IBlog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -70,6 +70,11 @@ export default function ManageBlogs() {
       </div>
     );
   }
+
+  // if (!user) {
+  //   router.push("/login");
+  //   return null;
+  // }
 
   if (isLoading) {
     return (
