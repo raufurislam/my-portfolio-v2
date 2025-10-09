@@ -84,11 +84,6 @@ export default function AddBlog() {
     );
   }
 
-  if (!user) {
-    router.push("/login");
-    return null;
-  }
-
   const addTag = () => {
     if (newTag.trim() && !watchedTags.includes(newTag.trim())) {
       setValue("tags", [...watchedTags, newTag.trim()]);

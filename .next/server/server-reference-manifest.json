@@ -1,5 +1,51 @@
 {
-  "node": {},
+  "node": {
+    "003f9c6f7a06696fd938516c8aa96e8ad24b4bee1e": {
+      "workers": {
+        "app/(dashboard)/dashboard/users/page": {
+          "moduleId": "45501",
+          "async": false,
+          "exportedName": "getAllProjects",
+          "filename": "src/actions/user.ts"
+        }
+      },
+      "layer": {
+        "app/(dashboard)/dashboard/users/page": "rsc"
+      },
+      "filename": "src/actions/user.ts",
+      "exportedName": "getAllProjects"
+    },
+    "40d6a278f3d6fbfbd6a1697f3036b17482c4a277e3": {
+      "workers": {
+        "app/(dashboard)/dashboard/users/page": {
+          "moduleId": "45501",
+          "async": false,
+          "exportedName": "getAllUsers",
+          "filename": "src/actions/user.ts"
+        }
+      },
+      "layer": {
+        "app/(dashboard)/dashboard/users/page": "rsc"
+      },
+      "filename": "src/actions/user.ts",
+      "exportedName": "getAllUsers"
+    },
+    "60122388407c7063c7591f0c17b0ead1de515ec9d0": {
+      "workers": {
+        "app/(dashboard)/dashboard/users/page": {
+          "moduleId": "45501",
+          "async": false,
+          "exportedName": "apiFetch",
+          "filename": "src/lib/apiFetch.ts"
+        }
+      },
+      "layer": {
+        "app/(dashboard)/dashboard/users/page": "rsc"
+      },
+      "filename": "src/lib/apiFetch.ts",
+      "exportedName": "apiFetch"
+    }
+  },
   "edge": {},
   "encryptionKey": "9v89Bu3nN/uBygg8y2u+i+tWwYmmaU8VsEpfcDxR5iE="
 }

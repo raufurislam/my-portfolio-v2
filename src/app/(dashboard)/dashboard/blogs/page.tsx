@@ -71,11 +71,6 @@ export default function ManageBlogs() {
     );
   }
 
-  if (!user) {
-    router.push("/login");
-    return null;
-  }
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

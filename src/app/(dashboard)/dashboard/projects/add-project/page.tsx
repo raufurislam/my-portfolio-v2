@@ -105,11 +105,6 @@ export default function AddProject() {
     );
   }
 
-  if (!user) {
-    router.push("/login");
-    return null;
-  }
-
   const addTechnology = () => {
     if (
       newTechnology.trim() &&
@@ -161,7 +156,10 @@ export default function AddProject() {
       router.push("/dashboard/projects");
     } catch (error: unknown) {
       console.error("Error creating project:", error);
-      const errorMessage = error instanceof Error ? error.message : "Failed to create project. Please try again.";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to create project. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
