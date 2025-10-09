@@ -16,30 +16,6 @@ const roleBasedPrivateRoutes = {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  //   const cookieStore = await cookies();
-  //   const accessToken = cookieStore.get("accessToken")?.value;
-
-  //   if (!accessToken) {
-  //     if (AuthRoutes.includes(pathname)) {
-  //       return NextResponse.next();
-  //     } else {
-  //       return NextResponse.redirect(new URL("/login", request.url));
-  //     }
-  //   }
-
-  //   let decodedData = null;
-  //   decodedData = jwtDecode(accessToken) as any;
-  //   const role = decodedData?.role;
-
-  //   if (role && roleBasedPrivateRoutes[role as Role]) {
-  //     const routes = roleBasedPrivateRoutes[role as Role];
-  //     if (routes.some((route) => pathname.match(route))) {
-  //       return NextResponse.next();
-  //     }
-  //   }
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
-
   const accessToken = (await cookies()).get("accessToken")?.value;
 
   if (!accessToken) {
@@ -62,5 +38,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/dashboard/:path*"],
+  matcher: ["/login", "/register", "/dashboard/:page*"],
 };
