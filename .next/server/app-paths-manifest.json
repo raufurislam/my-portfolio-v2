@@ -1,6 +1,17 @@
 {
+  "/(auth)/login/page": "app/(auth)/login/page.js",
+  "/(auth)/register/page": "app/(auth)/register/page.js",
+  "/(dashboard)/dashboard/blogs/add-blog/page": "app/(dashboard)/dashboard/blogs/add-blog/page.js",
+  "/(dashboard)/dashboard/blogs/page": "app/(dashboard)/dashboard/blogs/page.js",
   "/(dashboard)/dashboard/page": "app/(dashboard)/dashboard/page.js",
+  "/(dashboard)/dashboard/projects/add-project/page": "app/(dashboard)/dashboard/projects/add-project/page.js",
+  "/(dashboard)/dashboard/projects/page": "app/(dashboard)/dashboard/projects/page.js",
+  "/(dashboard)/dashboard/users/page": "app/(dashboard)/dashboard/users/page.js",
+  "/(public)/blogs/[slug]/page": "app/(public)/blogs/[slug]/page.js",
   "/(public)/blogs/page": "app/(public)/blogs/page.js",
   "/(public)/page": "app/(public)/page.js",
+  "/(public)/projects/[slug]/page": "app/(public)/projects/[slug]/page.js",
+  "/(public)/projects/page": "app/(public)/projects/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js"
 }
