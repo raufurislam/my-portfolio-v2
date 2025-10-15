@@ -1,0 +1,14 @@
+[
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/auth\\/login(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/auth/login"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/auth\\/register(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/auth/register"
+  },
+  {
+    "regexp": "^(?:\\/(_next\\/data\\/[^/]{1,}))?\\/dashboard(?:\\/((?:[^\\/#\\?]+?)(?:\\/(?:[^\\/#\\?]+?))*))?(\\\\.json)?[\\/#\\?]?$",
+    "originalSource": "/dashboard/:page*"
+  }
+]

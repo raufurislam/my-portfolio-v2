@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { getAllUsers } from "@/actions/user";
+import { getAllUsers } from "@/app/actions/user";
 import CustomPagination from "@/components/shared/CustomPagination";
 import UrlSearchInput from "@/components/shared/UrlSearchInput";
 import UrlPerPageSelect from "@/components/shared/UrlPerPageSelect";
@@ -32,7 +32,8 @@ export default async function ManageUsers({
   const limit = Number(searchParams?.limit || 10);
   const role = (searchParams?.role as string) || "all";
   const isActive = (searchParams?.isActive as string) || "all";
-  const sort = (searchParams as Record<string, string | string[] | undefined>)?.sort as string | undefined;
+  const sort = (searchParams as Record<string, string | string[] | undefined>)
+    ?.sort as string | undefined;
   const searchTerm = (searchParams?.searchTerm as string) || "";
 
   const res = await getAllUsers({
@@ -152,53 +153,63 @@ export default async function ManageUsers({
                 </tr>
               </thead>
               <tbody>
-                {users.map((user: { _id: string; name?: string; email: string; avatar?: string; role: string; auths?: Array<{ provider: string }>; createdAt: string }) => (
-                  <tr
-                    key={user._id}
-                    className="border-b hover:bg-muted/40 transition-colors"
-                  >
-                    <td className="px-4 py-3 flex items-center gap-3">
-                      {user.avatar ? (
-                        <Image
-                          src={user.avatar}
-                          alt={user.name || user.email}
-                          width={32}
-                          height={32}
-                          className="rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold uppercase">
-                          {(user.name || user.email || "U").slice(0, 1)}
-                        </div>
-                      )}
-                      <span className="font-medium">
-                        {user.name || "Unnamed"}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
-                      {user.email}
-                    </td>
-                    <td className="px-4 py-3 text-sm">{user.role}</td>
-                    <td className="px-4 py-3 text-sm space-x-1">
-                      {(user.auths || []).map((a: { provider: string }) => (
-                        <span
-                          key={a.provider}
-                          className="inline-block px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs capitalize"
-                        >
-                          {a.provider}
+                {users.map(
+                  (user: {
+                    _id: string;
+                    name?: string;
+                    email: string;
+                    avatar?: string;
+                    role: string;
+                    auths?: Array<{ provider: string }>;
+                    createdAt: string;
+                  }) => (
+                    <tr
+                      key={user._id}
+                      className="border-b hover:bg-muted/40 transition-colors"
+                    >
+                      <td className="px-4 py-3 flex items-center gap-3">
+                        {user.avatar ? (
+                          <Image
+                            src={user.avatar}
+                            alt={user.name || user.email}
+                            width={32}
+                            height={32}
+                            className="rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-xs font-semibold uppercase">
+                            {(user.name || user.email || "U").slice(0, 1)}
+                          </div>
+                        )}
+                        <span className="font-medium">
+                          {user.name || "Unnamed"}
                         </span>
-                      ))}
-                    </td>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">
+                        {user.email}
+                      </td>
+                      <td className="px-4 py-3 text-sm">{user.role}</td>
+                      <td className="px-4 py-3 text-sm space-x-1">
+                        {(user.auths || []).map((a: { provider: string }) => (
+                          <span
+                            key={a.provider}
+                            className="inline-block px-2 py-0.5 bg-gray-200 dark:bg-gray-700 rounded text-xs capitalize"
+                          >
+                            {a.provider}
+                          </span>
+                        ))}
+                      </td>
 
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
-                      {new Date(user.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </td>
-                  </tr>
-                ))}
+                      <td className="px-4 py-3 text-sm text-muted-foreground">
+                        {new Date(user.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>

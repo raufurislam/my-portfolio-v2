@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 type Role = keyof typeof roleBasedPrivateRoutes;
 
-const AuthRoutes = ["/login", "/register"];
+const AuthRoutes = ["/auth/login", "/auth/register"];
 
 const roleBasedPrivateRoutes = {
   SUPER_ADMIN: [/^\/dashboard/],
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     if (AuthRoutes.includes(pathname)) {
       return NextResponse.next();
     } else {
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
   let decodedData = null;
@@ -38,5 +38,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/register", "/dashboard/:page*"],
+  matcher: ["/auth/login", "/auth/register", "/dashboard/:page*"],
 };
