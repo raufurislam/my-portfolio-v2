@@ -11,12 +11,12 @@
       "page": "/",
       "matchers": [
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/auth/login{(\\\\.json)}?",
-          "originalSource": "/auth/login"
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/login{(\\\\.json)}?",
+          "originalSource": "/login"
         },
         {
-          "regexp": "/:nextData(_next/data/[^/]{1,})?/auth/register{(\\\\.json)}?",
-          "originalSource": "/auth/register"
+          "regexp": "/:nextData(_next/data/[^/]{1,})?/register{(\\\\.json)}?",
+          "originalSource": "/register"
         },
         {
           "regexp": "/:nextData(_next/data/[^/]{1,})?/dashboard/:page*{(\\\\.json)}?",
@@ -28,9 +28,9 @@
       "env": {
         "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "9v89Bu3nN/uBygg8y2u+i+tWwYmmaU8VsEpfcDxR5iE=",
-        "__NEXT_PREVIEW_MODE_ID": "53b62d2b8c0a41c56e6a79dcec998cb3",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "6b47df14ce2e08a35dc2a72be9269b939dc6a4ef26ba2b9b8f9f3b72c8959954",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "a720cbb03d2c5697ea5fc7b836175bb8692f89950ba571fee34be802062cf5fd"
+        "__NEXT_PREVIEW_MODE_ID": "2bb70dbbb9ccb4d122e0beb1941fa01e",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "541b373262ee46b2d47fbc55293041444fcb7060e191858dbd13b5058d238fb7",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "4704033dd67bdab874ea74d9d2ac6a464ad782b69185bee6e140f629632e55b8"
       }
     }
   },

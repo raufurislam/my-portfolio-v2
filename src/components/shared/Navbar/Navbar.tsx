@@ -33,6 +33,7 @@ import { LogOut, User, Settings } from "lucide-react";
 import { ModeToggle } from "../ModeToggler";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
+import { userInfo } from "@/app/actions/authAction";
 
 // Example roles (replace with your constants)
 // const role = {
@@ -48,10 +49,12 @@ const navigationLinks = [
   { href: "/dashboard", label: "Dashboard", role: "SUPER_ADMIN" },
 ];
 
-export default function Navbar() {
+export default async function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const { user, logout, isAuthenticated, isSuperAdmin } = useAuth();
+  const { logout, isAuthenticated, isSuperAdmin } = useAuth();
+
+  const user = await userInfo();
 
   const handleLogout = async () => {
     try {
